@@ -10,11 +10,11 @@ export default function SettingsPage() {
   const [userTalent, setUserTalent] = useState<string>("");
 
   useEffect(() => {
-    const userEmail = localStorage.getItem("userEmail");
-    if (userEmail) {
-      setUserEmail(userEmail);
+    const email = localStorage.getItem("userEmail");
+    if (email) {
+      setUserEmail(email);
       // Fetch user details based on userEmail from Supabase
-      fetchUserData(userEmail);
+      fetchUserData(email);
     }
   }, []);
 
@@ -33,7 +33,8 @@ export default function SettingsPage() {
         setUserDateOfBirth(data.date_of_birth || "");
         setUserTalent(data.talent || "");
       }
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error;
       console.error("Error fetching user data:", error.message);
       toast.error("Error fetching user data");
     }
@@ -41,7 +42,7 @@ export default function SettingsPage() {
 
   const updateUserDetails = async () => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("users")
         .update({
           name: userName,
@@ -55,7 +56,8 @@ export default function SettingsPage() {
       } else {
         toast.success("User details updated successfully");
       }
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error;
       console.error("Error updating user details:", error.message);
       toast.error("Error updating user details");
     }
