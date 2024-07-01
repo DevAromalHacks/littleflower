@@ -24,6 +24,8 @@ type Link = {
   url: string;
 };
 
+type Subject = "Physics" | "Chemistry"; // Add more subjects as needed
+
 export default function Gracemark() {
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedClass, setSelectedClass] = useState<string>("");
@@ -32,14 +34,14 @@ export default function Gracemark() {
   const [subjects, setSubjects] = useState<string[]>([]);
   const [markedStudents, setMarkedStudents] = useState<Student[]>([]);
   const [existingMarks, setExistingMarks] = useState<MarkedStudent[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [selectedSubject, setSelectedSubject] = useState<Subject | "">("");
   const [commonMark, setCommonMark] = useState<number | null>(null);
   const [recentlyMarked, setRecentlyMarked] = useState<MarkedStudent[]>([]);
   const [notesLinks, setNotesLinks] = useState<Link[]>([]);
   const [pyqLinks, setPyqLinks] = useState<Link[]>([]);
   const supabase = createClientComponentClient();
 
-  const predefinedNotesLinks = {
+  const predefinedNotesLinks: Record<Subject, Link[]> = {
     Physics: [
       {
         id: "1",
@@ -66,7 +68,7 @@ export default function Gracemark() {
     ],
   };
 
-  const predefinedPyqLinks = {
+  const predefinedPyqLinks: Record<Subject, Link[]> = {
     Physics: [
       {
         id: "1",
@@ -91,7 +93,6 @@ export default function Gracemark() {
         url: "https://example.com/chemistry/pyq2020",
       },
     ],
-    // Add more subjects and their respective PYQs here
   };
 
   useEffect(() => {
@@ -145,9 +146,10 @@ export default function Gracemark() {
   }, []);
 
   const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSubject(e.target.value);
-    setNotesLinks(predefinedNotesLinks[e.target.value] || []);
-    setPyqLinks(predefinedPyqLinks[e.target.value] || []);
+    const selected = e.target.value as Subject;
+    setSelectedSubject(selected);
+    setNotesLinks(predefinedNotesLinks[selected] || []);
+    setPyqLinks(predefinedPyqLinks[selected] || []);
   };
 
   const handleSubmit = async () => {
