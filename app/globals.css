@@ -1,0 +1,280 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 0;
+}
+
+body {
+    background-color: #000000;
+}
+
+.nav-top {
+    position: relative;
+    top: -40px;
+}
+
+.overflow {
+    overflow-y: hidden;
+}
+
+.grid-template-column-repeat {
+    grid-template-columns: repeat(auto-fit, minmax(250px));
+}
+
+.grid-auto-rows {
+    grid-auto-rows: 200px;
+}
+
+.grid-auto-flow {
+    grid-auto-rows: dense;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.bg-opacity-50 {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.text-darkblue {
+    color: #344256;
+}
+
+.bg-darkblue {
+    background-color: #344256;
+}
+
+.text-orange {
+    color: #ec7200;
+}
+
+.text-orange:hover {
+    color: #ec7200;
+}
+
+.bg-orange {
+    background-color: #ec7200;
+}
+
+.card-wrapper .card-container .head2 h1 {
+    text-align: center;
+    font-size: 40px;
+    padding-bottom: 30px;
+}
+
+.card-wrapper .card-container .contents {
+    display: flex;
+    padding-left: 200px;
+    padding: 50px;
+}
+
+.card-wrapper .card-container {
+    min-height: calc(100vh - 4em);
+    padding: 2em;
+}
+
+.card-wrapper .card-container .photo_array {
+    display: grid;
+    grid-gap: .5rem;
+    grid-template-areas:
+        "photoOne PhotoTwo photoThree"
+        "photoOne PhotoFour photoFive";
+    grid-template-columns: 1fr 25% 25%;
+}
+
+.card-wrapper .card-container .photo_array>div {
+    border: 3px solid #f97316;
+    border-radius: 10px;
+}
+
+.card-wrapper .card-container .photo_array>div:first-child {
+    grid-area: photoOne;
+    height: 565px;
+}
+
+.card-wrapper .card-container .photo_array div img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.text-small {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .card-wrapper .card-container .head2 h1 {
+        font-size: 2rem;
+    }
+
+    .card-wrapper .card-container .photo_array {
+        grid-template-areas:
+            "photoOne photoOne photoOne"
+            "PhotoTwo PhotoThree PhotoFour"
+            "PhotoFive PhotoFive PhotoFive";
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .card-wrapper .card-container .photo_array>div:first-child {
+        height: auto;
+    }
+}
+
+@media (max-width: 300px) {
+    .card-wrapper .card-container .head2 h1 {
+        font-size: 20px;
+    }
+
+    .card-wrapper .card-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .card-wrapper .card-container .photo_array div img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media screen and (min-width: 361px) and (max-width: 1000px) {
+    Level {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    Level {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+.text-shadow-orange {
+    text-shadow: 0px 0px 50px #f9ae00;
+}
+
+.text-shadow-black {
+    text-shadow: 0px 0px 100px #000000fb;
+}
+
+.h-100 {
+    height: 450px;
+}
+
+.w-450 {
+    width: 450px;
+}
+
+@media (max-width: 410px) {
+    .contact-inp {
+        width: 300px;
+    }
+
+    .contact-text {
+        width: 300px;
+    }
+
+    .enroll-select {
+        width: 300px;
+    }
+
+    .complaint-select {
+        width: 200px;
+    }
+}
+
+.whyus_section .whyus_wrapper .whyus_container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.whyus_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.whyus_item img {
+    width: 100px;
+    height: auto;
+}
+
+.w-200 {
+    width: 400px;
+}
+
+.nav-top {
+    position: relative;
+    top: -70px;
+}
+
+.grad-anime {
+    background: linear-gradient(to right top, #bb0049, #af2658, #a23964, #93466c, #84516f, #815c7f, #7b688d, #767397, #6589b4, #40a0c8, #00b7cc, #12ccc0);
+    background-size: 400% 400%;
+    animation: anime 10s ease infinite;
+}
+
+@keyframes anime {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.border-teal-shad {
+    border: #0170a7;
+    border-width: 1px;
+    box-shadow: 0px 0px 20px #00b7cc;
+}
+
+
+@media (min-width: 1023px) {
+    .disp_none {
+        display: none;
+    }
+    .disp_block {
+        display: block;
+    }
+}
+@media (max-width: 1023px) {
+    .disp_none {
+        display: none;
+    }
+    .disp_block {
+        display: block;
+    }
+}
+@media (min-width: 1024px) {
+    .displ_none {
+        display: none;
+    }
+    .displ_block {
+        display: block;
+    }
+}
+@media print {
+    .print\\:hidden {
+      display: none !important;
+    }
+  }
+  
