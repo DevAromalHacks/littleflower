@@ -52,7 +52,7 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative z-50 font-serif mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative z-20 font-serif mb-6">
               Empowering Minds, Igniting Futures: <br /> Welcome to Little Flower
             </h1>
             <div className="flex flex-wrap justify-center gap-4">

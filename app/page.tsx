@@ -26,7 +26,7 @@ export default function Page() {
 
   return (
     <div>
-      <Nav />
+      {/* <Nav /> */}
       <Hero />
       <Welcome />
       <Whyus />
