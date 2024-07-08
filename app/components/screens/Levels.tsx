@@ -1,130 +1,38 @@
-// import Image from "next/image";
-
-// interface LevelProps {
-//   src: string;
-//   alt: string;
-//   width: number;
-//   height: number;
-//   title: string;
-// }
-
-// export default function Levels() {
-//   return (
-//     <section className="py-20">
-//       <div>
-//         <h1 className="text-3xl font-bold text-orange text-center pb-20 text-shadow-orange">
-//           Our Levels
-//         </h1>
-//         <div className="hidden lg:block md:block sm:block">
-//           <div className="flex flex-wrap items-center justify-center gap-5">
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={200}
-//               height={200}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={200}
-//               height={200}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={200}
-//               height={200}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={200}
-//               height={200}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={200}
-//               height={200}
-//               title="kg"
-//             />
-//           </div>
-//         </div>
-//         <div className="block lg:hidden md:hidden sm:hidden">
-//           <div className="flex flex-wrap items-center justify-center gap-5">
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={150}
-//               height={150}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={150}
-//               height={150}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={150}
-//               height={150}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={150}
-//               height={150}
-//               title="kg"
-//             />
-//             <Level
-//               src="/images/kg.png"
-//               alt="image"
-//               width={150}
-//               height={150}
-//               title="kg"
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-// function Level({ src, alt, width, height, title }: LevelProps) {
-//   return (
-//     <div className="">
-//       <Image src={src} alt={alt} width={width} height={height} />
-//       <div className="w-44 bg-neutral-600 h-8 relative -top-4">
-//         <h1>{title}</h1>
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import Image from "next/image";
 
 export default function OurMission() {
   const controls = useAnimation();
-  const { ref, inView } = useInView();
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
   useEffect(() => {
-    if (inView) {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isLargeScreen && inView) {
+      controls.start("visible");
+    } else if (!isLargeScreen) {
       controls.start("visible");
     }
-  }, [controls, inView]);
+  }, [controls, inView, isLargeScreen]);
 
   return (
     <section className="py-16 bg-white px-4">
@@ -138,9 +46,8 @@ export default function OurMission() {
           emotional resilience, and social responsibility.
         </p>
       </div>
-      <div className="flex flex-wrap justify-center gap-8 lg:gap-16">
+      <div ref={isLargeScreen ? ref : null} className="flex flex-wrap justify-center gap-8 lg:gap-16">
         <motion.div
-          ref={ref}
           initial="hidden"
           animate={controls}
           variants={{
@@ -160,7 +67,6 @@ export default function OurMission() {
           </div>
         </motion.div>
         <motion.div
-          ref={ref}
           initial="hidden"
           animate={controls}
           variants={{
@@ -179,7 +85,6 @@ export default function OurMission() {
           </div>
         </motion.div>
         <motion.div
-          ref={ref}
           initial="hidden"
           animate={controls}
           variants={{

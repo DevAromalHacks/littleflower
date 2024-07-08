@@ -1,10 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Navbar from "../includes/Navbar";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 export default function Hero() {
@@ -38,9 +36,7 @@ export default function Hero() {
         }}
         className="relative"
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="relative z-10 w-full px-4">
-          <Navbar />
+        <div className="">
           <motion.div
             ref={ref}
             initial="hidden"
