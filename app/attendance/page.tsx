@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faUserClock } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faUserClock, faClipboard } from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
 
 interface Student {
@@ -77,7 +77,6 @@ export default function Attendance() {
       toast.error((error as Error).message);
     }
   };
-  
 
   const handleToggleAbsentee = (student: Student) => {
     if (absentees.find((absentee) => absentee.id === student.id)) {
@@ -87,6 +86,18 @@ export default function Attendance() {
     } else {
       setAbsentees((prevAbsentees) => [...prevAbsentees, student]);
     }
+  };
+
+  const handleCopyAllToClipboard = () => {
+    const namesToCopy = absentees.map(student => student.name).join("\n");
+    navigator.clipboard.writeText(namesToCopy)
+      .then(() => {
+        toast.success("Absentee names copied to clipboard!");
+      })
+      .catch((error) => {
+        toast.error("Failed to copy absentee names to clipboard.");
+        console.error("Copy to clipboard failed: ", error);
+      });
   };
 
   const handleSubmitAbsentees = async () => {
@@ -241,6 +252,40 @@ export default function Attendance() {
           </div>
         </div>
       </div>
+      <section className="bg-gradient-to-r from-green-300 to-blue-500 min-h-screen p-10 text-gray-900">
+        <h1 className="text-center font-bold text-white text-4xl py-10">
+          Take Attendance
+        </h1>
+        <div className="flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            {absentees.length > 0 ? (
+              <div>
+                <div className="flex justify-between font-semibold mb-4">
+                  <div>Name</div>
+                  <div>Roll No</div>
+                </div>
+                {absentees.map((student) => (
+                  <div key={student.id} className="flex items-center py-2 border-b border-gray-300">
+                    
+                    <span className="w-1/3">{student.name}</span>
+                    <span className="w-1/3">{student.roll}</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-center mt-4">
+                  <button
+                    onClick={handleCopyAllToClipboard}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faClipboard} className="mr-1" /> Copy All Names
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p>No absentees marked yet.</p>
+            )}
+          </div>
+        </div>
+      </section>
     </section>
   );
 }
