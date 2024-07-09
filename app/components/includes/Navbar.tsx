@@ -47,7 +47,11 @@ export default function Navbar() {
           onClick={toggleMenu}
           className="lg:hidden z-50 px-3 rounded-2xl focus:outline-none"
         >
-          {isMenuOpen ? <FaTimes className="text-white" size={24} /> : <FaBars className="text-white" size={24} />}
+          {isMenuOpen ? (
+            <FaTimes className="text-white" size={24} />
+          ) : (
+            <FaBars className="text-white" size={24} />
+          )}
         </button>
       </div>
       <div
@@ -62,12 +66,12 @@ export default function Navbar() {
             <NavItem href="/blog">Blog</NavItem>
             <NavItem href="/gallery">Gallery</NavItem>
             <NavItem href="/contact">Contact</NavItem>
+            <Button
+              href="/auth/login"
+              title="LOGIN"
+              className="bg-transparent py-2 px-10 text-lg border border-[#00AEEF] text-[#3669c8] hover:bg-[#00AEEF] hover:text-black transition duration-300"
+            />
           </ul>
-          <Button
-            href="/auth/login"
-            title="LOGIN"
-            className="bg-transparent py-2 px-10 text-lg border border-[#00AEEF] text-[#3669c8] hover:bg-[#00AEEF] hover:text-black transition duration-300"
-          />
         </div>
       </div>
       {isMenuOpen && (

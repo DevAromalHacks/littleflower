@@ -53,9 +53,6 @@ export default function Welcome() {
               <h1 className="welcome-head text-center text-2xl md:text-3xl font-bold text-[#002366] mb-4 lg:mb-6">
                 Welcome to Our School
               </h1>
-              <div className="relative">
-                <div className="w-64 h-64 rounded-md bg-[#ececec] filter-blur absolute -z-10"></div>
-              </div>
               <p className="welcome-para max-w-screen-md text-center text-lg lg:text-md lg:px-4 mb-6 text-[#333333]">
                 Welcome to Little Flower English Medium Higher Secondary School! Nestled in the serene locale of Edava, Thiruvananthapuram, Kerala, we are dedicated to delivering academic excellence. Guided by our committed teachers, we prioritize child-centered learning and holistic development, enriching the educational journey of every student.
               </p>
