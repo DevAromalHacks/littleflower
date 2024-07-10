@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+import LoginPromptModal from "./LoginPromptModal"; // Import the modal component
 
 const supabase = createClientComponentClient();
 
@@ -24,6 +26,7 @@ const ImageGallery: React.FC = () => {
   const [galleryColumns, setGalleryColumns] = useState(3);
   const [likedImages, setLikedImages] = useState<Set<number>>(new Set());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginPromptOpen, setLoginPromptOpen] = useState(false); // State for the modal
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -38,20 +41,27 @@ const ImageGallery: React.FC = () => {
     const fetchData = async () => {
       try {
         const { data, error } = await supabase
-          .from('Upload')
-          .select('id, secure_url, title, likes');
+          .from("Upload")
+          .select("id, secure_url, title, likes");
 
         if (error) {
           throw error;
         }
 
-        const formattedData = data.map((item: { id: number; secure_url: string; title: string; likes: number }) => ({
-          id: item.id,
-          src: item.secure_url,
-          title: item.title,
-          description: item.title,
-          likes: item.likes || 0
-        }));
+        const formattedData = data.map(
+          (item: {
+            id: number;
+            secure_url: string;
+            title: string;
+            likes: number;
+          }) => ({
+            id: item.id,
+            src: item.secure_url,
+            title: item.title,
+            description: item.title,
+            likes: item.likes || 0,
+          })
+        );
 
         setImages(formattedData);
       } catch (error) {
@@ -95,15 +105,18 @@ const ImageGallery: React.FC = () => {
     };
   }, []);
 
-  const handleLikeClick = async (event: React.MouseEvent<SVGElement, MouseEvent>, id: number) => {
+  const handleLikeClick = async (
+    event: React.MouseEvent<SVGElement, MouseEvent>,
+    id: number
+  ) => {
     event.stopPropagation();
 
     if (!isLoggedIn) {
-      alert("You must be logged in to like an image.");
+      setLoginPromptOpen(true); // Open the modal
       return;
     }
 
-    const imageToLike = images.find(image => image.id === id);
+    const imageToLike = images.find((image) => image.id === id);
     if (!imageToLike) return;
 
     let updatedLikes = imageToLike.likes;
@@ -120,9 +133,9 @@ const ImageGallery: React.FC = () => {
     }
 
     const { error } = await supabase
-      .from('Upload')
+      .from("Upload")
       .update({ likes: updatedLikes })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
       console.error("Error updating likes:", error);
@@ -136,11 +149,18 @@ const ImageGallery: React.FC = () => {
     );
 
     setLikedImages(newLikedImages);
-    localStorage.setItem("likedImages", JSON.stringify(Array.from(newLikedImages)));
+    localStorage.setItem(
+      "likedImages",
+      JSON.stringify(Array.from(newLikedImages))
+    );
   };
 
   return (
     <>
+      <LoginPromptModal
+        open={loginPromptOpen}
+        handleClose={() => setLoginPromptOpen(false)}
+      />
       <div>
         <div
           style={{
@@ -185,8 +205,10 @@ const ImageGallery: React.FC = () => {
               margin: "0 auto",
             }}
           />
-          <p>{tempDescription}</p>
-          <p>Likes: {tempLikes}</p>
+          <div className="px-10">
+            <p className="text-center">{tempDescription}</p>
+            <p className="">Likes: {tempLikes}</p>
+          </div>
         </div>
 
         <div
@@ -201,7 +223,9 @@ const ImageGallery: React.FC = () => {
             <div
               className="media"
               key={image.id}
-              onClick={() => getImg(image.src, image.description, image.likes)}
+              onClick={() =>
+                getImg(image.src, image.description, image.likes)
+              }
               style={{
                 transition: "all 350ms ease",
                 cursor: "pointer",
@@ -213,7 +237,7 @@ const ImageGallery: React.FC = () => {
                 icon={faHeart}
                 onClick={(e) => handleLikeClick(e, image.id)}
                 className={`absolute top-2 left-2 w-8 h-8 cursor-pointer ${
-                  likedImages.has(image.id) ? 'text-red-500' : 'text-white'
+                  likedImages.has(image.id) ? "text-red-500" : "text-white"
                 }`}
               />
               <Image
