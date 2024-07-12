@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "../includes/Navbar";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
@@ -36,7 +37,9 @@ export default function Hero() {
         }}
         className="relative"
       >
-        <div className="">
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="relative z-10 w-full px-4">
+          <Navbar />
           <motion.div
             ref={ref}
             initial="hidden"
@@ -48,7 +51,7 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative z-20 font-serif mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative z-50 font-serif mb-6">
               Empowering Minds, Igniting Futures: <br /> Welcome to Little Flower
             </h1>
             <div className="flex flex-wrap justify-center gap-4">
@@ -87,17 +90,12 @@ export default function Hero() {
           </div>
         </div>
         {isChatOpen && (
-          <div className="fixed bottom-24 right-10 bg-white p-4 rounded-lg shadow-lg w-64">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-bold">Chatbot</h3>
-              <button onClick={toggleChat} className="text-gray-500 hover:text-gray-700">
-                X
-              </button>
-            </div>
-            <div className="text-gray-800">
-              <p>Hello! How can I assist you today?</p>
-              {/* Add chatbot interaction elements here */}
-            </div>
+          <div className="fixed lg:bottom-24 bottom-8 md:bottom-24 right-16 md:right-20 lg:right-40  p-4 z-20 rounded-lg shadow-lg w-64">
+            <iframe
+              src="https://www.chatbase.co/chatbot-iframe/QqtxZYwWGfVdWEM5qzEow"
+              className="w-96 h-[500px]"
+              frameBorder="0"
+            ></iframe>
           </div>
         )}
       </div>
