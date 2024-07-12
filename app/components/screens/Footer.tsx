@@ -65,7 +65,7 @@ export default function Footer() {
         <div className="flex-1 text-center md:text-right">
           <h2 className="text-2xl font-semibold mb-4">Contact Info</h2>
           <div className="space-y-2">
-            <p>123 Street Name, City</p>
+            <p>Little Flower, Edava, <br /> Thiruvananthapuram, Kerala 695311</p>
             <p>info@example.com</p>
             <p>123-456-7890</p>
           </div>

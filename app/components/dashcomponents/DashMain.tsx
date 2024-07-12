@@ -1,133 +1,131 @@
-"use client";
+import React, { useState, useEffect } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faUserGraduate,
-  faCalendarCheck,
-  faLifeRing,
-  faVideo,
-  faBell,
-  faCalendarTimes,
-  faCog,
-  faMicrochip,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import Support from "../chat/Main";
-import Notifications from "./tabs/Notifications";
-import Home from "./tabs/Home";
-import StudentsSideHam from "./ham/StudentsSideHam";
-import Events from "./tabs/Events";
-import Absent from "./tabs/Absent";
-import Modal from "./tabs/model/Model";
-import OnlineEvents from "./tabs/Online_Events";
-import LogOut from "./tabs/Logout";
-import Resource from "./tabs/Resources";
-import Settings from "./tabs/Settings";
-
-export default function Sidebar() {
+export default function Home() {
   const [activeTab, setActiveTab] = useState("Home");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [greeting, setGreeting] = useState("");
+  const [quote, setQuote] = useState(
+    "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt"
+  );
+  const supabase = createClientComponentClient();
 
-  const tabs = [
-    { label: "Home", icon: faHome },
-    { label: "Students Resource", icon: faUserGraduate },
-    { label: "Upcoming Events", icon: faCalendarCheck }, // changed icon
-    { label: "Support", icon: faLifeRing }, // changed icon
-    { label: "Online Events", icon: faVideo }, // changed icon
-    { label: "Notifications", icon: faBell },
-    { label: "Absent Days", icon: faCalendarTimes },
-    { label: "Ask AI", icon: faMicrochip }, // changed icon
-    { label: "Settings", icon: faCog },
-  ];
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const email = localStorage.getItem("email");
+        if (!email) {
+          console.error("No email found in localStorage");
+          return;
+        }
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "Home":
-        return <Home />;
-      case "Students Resource":
-        return <Resource />;
-      case "Upcoming Events":
-        return <Events />;
-      case "Support":
-        return <Support />;
-      case "Online Events":
-        return <OnlineEvents />;
-      case "Notifications":
-        return <Notifications />;
-      case "Absent Days":
-        return <Absent />;
-      case "Ask AI":
-        return <div>Settings Content</div>;
-      case "Settings":
-        return <Settings />;
-      default:
-        return null;
+        console.log("Fetching user data for email:", email);
+
+        const { data: userData, error } = await supabase
+          .from("users")
+          .select("name, date_of_birth")
+          .eq("email", email)
+          .single();
+
+        if (error) {
+          console.error("Error fetching user data:", error);
+        } else {
+          console.log("Fetched user data:", userData);
+          const { name, date_of_birth: dateOfBirth } = userData || {};
+          setName(name || "User");
+
+          const currentDate = new Date();
+          const currentMonth = currentDate.getMonth() + 1;
+          const currentDay = currentDate.getDate();
+
+          if (dateOfBirth) {
+            const [birthYear, birthMonth, birthDay] = dateOfBirth
+              .split("-")
+              .map(Number);
+
+            if (birthMonth === currentMonth && birthDay === currentDay) {
+              setGreeting(`Happy Birthday`);
+            } else {
+              setGreeting(getCurrentGreeting());
+            }
+          } else {
+            setGreeting(getCurrentGreeting());
+          }
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      }
+    };
+
+    fetchUserData();
+  }, [supabase]);
+
+  const getCurrentGreeting = () => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      return "Good morning";
+    } else if (currentHour < 18) {
+      return "Good afternoon";
+    } else {
+      return "Good evening";
     }
   };
 
-  const handleLogoutClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const firstLetter = name.charAt(0);
 
   return (
     <section>
-      <div className="disp_block displ_none">
-        <StudentsSideHam />
-      </div>
-      <div className="disp_none displ_block">
-        <div className="flex h-screen">
-          <aside className="bg-gray-950 text-gray-300 py-4 w-64 h-full flex flex-col justify-between ">
-            <div className="text-center text-2xl font-semibold mb-8">
-              <div className="py-2 cursor-pointer">
-                <span className="text-purple-400 hover:text-gray-200">
-                  Little Flower
-                </span>
-              </div>
+      <div className="p-6">
+        <div className="grad-anime p-6 rounded-lg mb-6">
+          <div className="flex items-end justify-end mb-6">
+            <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
+              <h1 className="text-center text-2xl text-white">{firstLetter}</h1>
             </div>
-
-            <nav className="px-4 flex-grow">
-              {tabs.map((tab) => (
-                <div
-                  key={tab.label}
-                  className={`cursor-pointer ${
-                    activeTab === tab.label
-                      ? "bg-purple-900 text-white"
-                      : "bg-gray-800 text-gray-400"
-                  } hover:bg-purple-900 rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
-                  onClick={() => setActiveTab(tab.label)}
-                >
-                  <FontAwesomeIcon icon={tab.icon} className="pt-1" />
-                  <span>{tab.label}</span>
-                </div>
-              ))}
-            </nav>
-
-            <div className="mb-4 px-2">
-              <div
-                className="flex space-x-2 py-4 px-4 bg-red-600 hover:bg-red-700 rounded cursor-pointer items-center"
-                onClick={handleLogoutClick}
-              >
-                <FontAwesomeIcon icon={faSignOutAlt} className="pt-1" />
-                <span>Logout</span>
-              </div>
-            </div>
-          </aside>
-          <main className="flex-grow p-8 overflow-hidden text-gray-600 text-2xl bg-gray-900">
-            {renderContent()}
-          </main>
+          </div>
+          <h1 className="text-3xl mb-4 text-white">
+            {greeting}, {name} 🎉
+          </h1>
+          <p className="text-xl text-white">{quote}</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-teal-100 shadow-lg rounded p-4">
+            <h2 className="text-xl mb-2">Quick Stats</h2>
+            <ul className="font-serif">
+              <li>Total Assignments: 10</li>
+              <li>Pending Tasks: 3</li>
+            </ul>
+          </div>
+          <div className="bg-yellow-100 shadow-lg rounded p-4">
+            <h2 className="text-xl mb-2">Recent Activities</h2>
+            <ul className="font-serif">
+              <li>Assignment 1 graded</li>
+              <li>New course material added</li>
+              <li>Meeting scheduled for Monday</li>
+            </ul>
+          </div>
+          <div className="bg-purple-100 shadow-lg rounded p-4">
+            <h2 className="text-xl mb-2">Upcoming Events</h2>
+            <ul className="font-serif">
+              <li>Math Test - May 22</li>
+              <li>Science Fair - May 20</li>
+            </ul>
+          </div>
+          <div className="bg-green-100 shadow-lg rounded p-4">
+            <h2 className="text-xl mb-2">To-Do List</h2>
+            <ul className="font-serif">
+              <li>Complete Math Homework</li>
+              <li>Submit English Essay</li>
+            </ul>
+          </div>
+          <div className="bg-red-100 shadow-lg rounded p-4">
+            <h2 className="text-xl mb-2">Notifications</h2>
+            <ul className="font-serif">
+              <li>New Message from Mr. Smith</li>
+              <li>Assignment Feedback available</li>
+            </ul>
+          </div>
         </div>
       </div>
-      {isModalOpen && (
-        <Modal onClose={closeModal}>
-          <LogOut />
-        </Modal>
-      )}
     </section>
   );
 }

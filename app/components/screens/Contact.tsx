@@ -29,7 +29,6 @@ const Contact: FC = () => {
           <h2 className="text-2xl text-justify font-bold mt-6 mb-4 text-cyan-500">General Enquiries</h2>
           <p className="text-justify">edavalittleflower@gmail.com</p>
           <h2 className="text-2xl text-justify font-bold mt-6 mb-4 text-cyan-500">Call Us</h2>
-          <p className="text-justify">+91-8113890702</p>
           <p className="text-justify">+91-9895133248 | +91-9447863094</p>
           <p className="text-justify">0470-2660156 | 0470-2664335</p>
           <p className="text-justify">0470-2664336</p>
