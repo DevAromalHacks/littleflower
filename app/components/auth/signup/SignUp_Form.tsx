@@ -17,7 +17,8 @@ export default function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [date_of_birth, setDate_Of_Birth] = useState("");
-  const [talent, setTalent] = useState("")
+  const [talent, setTalent] = useState("");
+  const [otherTalent, setOtherTalent] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const supabase = createClientComponentClient();
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function SignUpForm() {
           className,
           div,
           date_of_birth,
-          talent,
+          talent: talent === "Others" ? otherTalent : talent,
         },
       ]);
 
@@ -56,7 +57,7 @@ export default function SignUpForm() {
       }
 
       if (user) {
-        localStorage.setItem("email", email);
+        localStorage.setItem("userEmail", email);
         toast.success("Account created successfully");
         router.push("/auth/login");
       } else {
@@ -125,6 +126,7 @@ export default function SignUpForm() {
                     <select
                       id="class"
                       value={className}
+                      required
                       onChange={(e) => setClassName(e.target.value)}
                       className="text-black px-3 w-64 h-10 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
                     >
@@ -150,6 +152,7 @@ export default function SignUpForm() {
                     <select
                       id="div"
                       value={div}
+                      required
                       onChange={(e) => setDiv(e.target.value)}
                       className="text-black px-3 w-64 h-10 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
                     >
@@ -244,6 +247,7 @@ export default function SignUpForm() {
                   <div className="mt-2 mb-2">
                     <input
                       type="date"
+                      required
                       id="dob"
                       value={date_of_birth}
                       onChange={handleDateOfBirthChange}
@@ -261,6 +265,7 @@ export default function SignUpForm() {
                     <select
                       name="talent"
                       id="talent"
+                      required
                       value={talent}
                       onChange={(e) => setTalent(e.target.value)}
                       className="text-black px-3 w-64 h-10 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
@@ -274,6 +279,20 @@ export default function SignUpForm() {
                       <option value="Others">Others</option>
                     </select>
                   </div>
+                  {talent === "Others" && (
+                    <div className="mt-2 mb-2">
+                      <input
+                        type="text"
+                        name="otherTalent"
+                        id="otherTalent"
+                        value={otherTalent}
+                        required
+                        onChange={(e) => setOtherTalent(e.target.value)}
+                        placeholder="Specify your talent"
+                        className="text-black px-3 w-64 h-10 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-center py-10">
