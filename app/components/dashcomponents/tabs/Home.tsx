@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("Home");
@@ -8,46 +7,44 @@ export default function Home() {
   const [quote, setQuote] = useState(
     "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt"
   );
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const email = localStorage.getItem("email");
+      const email = localStorage.getItem("userEmail");
       if (!email) return;
 
-      const { data: userData, error } = await supabase
-        .from("users")
-        .select("name, date_of_birth")
-        .eq("email", email)
-        .single();
+      try {
+        const response = await fetch(`/api/server/route?email=${email}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const userData = await response.json();
 
-      if (error) {
-        console.error("Error fetching user data:", error);
-      } else {
-        const { name, date_of_birth: dateOfBirth } = userData || {};
+        const { name, date_of_birth: dateOfBirth } = userData;
         setName(name || "User");
+
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth() + 1;
         const currentDay = currentDate.getDate();
 
         if (dateOfBirth) {
-          const [birthYear, birthMonth, birthDay] = dateOfBirth
-            .split("-")
-            .map(Number);
+          const [birthYear, birthMonth, birthDay] = dateOfBirth.split("-").map(Number);
 
           if (birthMonth === currentMonth && birthDay === currentDay) {
-            setGreeting(`Happy Birthday`);
+            setGreeting("Happy Birthday");
           } else {
             setGreeting(getCurrentGreeting());
           }
         } else {
           setGreeting(getCurrentGreeting());
         }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
     };
 
     fetchUserData();
-  }, [supabase]);
+  }, []);
 
   const getCurrentGreeting = () => {
     const currentHour = new Date().getHours();
@@ -59,6 +56,7 @@ export default function Home() {
       return "Good evening";
     }
   };
+
   const firstLetter = name.charAt(0);
 
   return (

@@ -21,7 +21,8 @@ import Events from "./tabs/Events";
 import Absent from "./tabs/Absent";
 import Modal from "./tabs/model/Model";
 import OnlineEvents from "./tabs/Online_Events";
-import LogOut from "./tabs/Logout"; // Import the LogOut component
+import LogOut from "./tabs/Logout";
+import Resorces from "./tabs/Resources"
 
 export default function Sidebar() {
   const [activeTab, setActiveTab] = useState("Home");
