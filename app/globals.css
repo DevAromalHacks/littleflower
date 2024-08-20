@@ -291,4 +291,9 @@ body {
     align-items: center;
     justify-content: center;
   }
-  
+  .obsidean{
+    background: #0B1215;
+  }
+  .oil-black{
+    background: #000b0b;
+  }

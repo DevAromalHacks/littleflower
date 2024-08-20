@@ -113,7 +113,7 @@ export default function Navbar() {
 
       {isMenuOpen && (
         <div className="lg:hidden w-64 fixed inset-0 bg-black bg-opacity-80 z-40 flex flex-col items-center justify-center space-y-4">
-          <aside className="bg-gray-900 text-gray-300 py-4 w-64 h-full flex flex-col justify-between">
+          <aside className="oil-black text-gray-300 py-4 w-64 h-full flex flex-col justify-between">
             <div className="text-center text-2xl font-semibold mb-8">
               <div className="py-2 cursor-pointer">
                 <span className="text-purple-400 hover:text-gray-200">
@@ -148,7 +148,7 @@ export default function Navbar() {
           </aside>
         </div>
       )}
-      <main className="flex-grow p-8 text-gray-600 text-2xl bg-gray-800">
+      <main className="flex-grow p-8 text-gray-600 text-2xl obsidean">
         {renderContent()}
       </main>
     </section>

@@ -77,7 +77,7 @@ export default function Sidebar() {
       </div>
       <div className="disp_none displ_block">
         <div className="flex h-screen">
-          <aside className="bg-gray-950 text-gray-300 py-4 w-64 h-full flex flex-col justify-between ">
+          <aside className="oil-black text-gray-300 py-4 w-64 h-full flex flex-col justify-between ">
             <div className="text-center text-2xl font-semibold mb-8">
               <div className="py-2 cursor-pointer">
                 <span className="text-purple-400 hover:text-gray-200">
@@ -92,9 +92,9 @@ export default function Sidebar() {
                   key={tab.label}
                   className={`cursor-pointer ${
                     activeTab === tab.label
-                      ? "bg-purple-900 text-white"
-                      : "bg-gray-800 text-gray-400"
-                  } hover:bg-purple-900 rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
+                      ? "bg-yellow-500 text-white"
+                      : "bg-gray-800 text-gray-200"
+                  } hover:bg-yellow-700 rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
                   onClick={() => setActiveTab(tab.label)}
                 >
                   <FontAwesomeIcon icon={tab.icon} className="pt-1" />
@@ -113,7 +113,7 @@ export default function Sidebar() {
               </div>
             </div>
           </aside>
-          <main className="flex-grow p-8 overflow-hidden text-gray-600 text-2xl bg-gray-900">
+          <main className="flex-grow p-8 text-gray-600 text-2xl obsidean">
             {renderContent()}
           </main>
         </div>
