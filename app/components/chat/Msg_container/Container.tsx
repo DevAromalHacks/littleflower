@@ -19,12 +19,12 @@ export default function Msg_Container() {
   // Fetch user data based on email stored in localStorage
   useEffect(() => {
     const fetchUserData = async () => {
-      const email = localStorage.getItem("email");
-      if (email) {
+      const userEmail = localStorage.getItem("userEmail");
+      if (userEmail) {
         const { data, error } = await supabase
           .from("users")
           .select("*")
-          .eq("email", email)
+          .eq("email", userEmail)
           .single();
         if (error) {
           console.error("Error fetching user:", error);
@@ -32,7 +32,7 @@ export default function Msg_Container() {
           setUser(data);
           console.log("User data fetched:", data); // Debug: log user data
         } else {
-          console.log("No user data found for email:", email);
+          console.log("No user data found for email:", userEmail);
         }
       } else {
         console.log("No email found in localStorage");
@@ -99,12 +99,14 @@ export default function Msg_Container() {
       console.warn("User data is missing");
       return;
     }
-
+  
     if (inputValue.trim() === "") {
       console.warn("Input value is empty");
       return;
     }
-
+  
+    console.log("Attempting to send message:", inputValue); // Debug log
+  
     if (selectedMessageId) {
       // Handle reply
       const { error: updateError } = await supabase
@@ -112,7 +114,7 @@ export default function Msg_Container() {
         .update({ reply: inputValue })
         .eq("id", selectedMessageId)
         .neq("user_id", user.id);
-
+  
       if (updateError) {
         toast.error("Error sending reply");
         console.error("Error sending reply:", updateError);
@@ -136,18 +138,20 @@ export default function Msg_Container() {
           },
         ])
         .select();
-
+  
       if (error) {
-        console.error("Error storing message:", error);
+        console.error("Error storing message:", error); // Log Supabase error
       } else if (data) {
-        console.log("Message stored:", data);
+        console.log("Message stored successfully:", data); // Check data returned from Supabase
         setMessages((prevMessages) => [data[0], ...prevMessages]);
+        console.log("Updated messages state:", messages); // Log updated messages state
       }
     }
-
+  
     // Clear the input field
     setInputValue("");
   };
+  
 
   return (
     <section className="p-6 h-screen flex flex-col justify-between">
@@ -162,7 +166,7 @@ export default function Msg_Container() {
               <div
                 className={`p-3 w-auto max-w-xs text-xl md:max-w-sm lg:max-w-md rounded-l-xl rounded-br-xl ${
                   message.user_id === user?.id
-                    ? "bg-yellow-500 text-white text-right"
+                    ? "bg-gradient-to-r from-blue-950 to-blue-500 hover:bg-gradient-to-r text-white text-right"
                     : "bg-gray-200 text-gray-800"
                 }`}
                 onClick={() => {
@@ -188,8 +192,8 @@ export default function Msg_Container() {
         <form
           className="flex items-center justify-center"
           onSubmit={(e) => {
-            e.preventDefault();
-            handleSendMessage();
+            e.preventDefault(); // Prevent form from refreshing the page
+            handleSendMessage(); // Call the function to send the message
           }}
         >
           <input
@@ -201,7 +205,7 @@ export default function Msg_Container() {
           />
           <button
             type="submit"
-            className="flex items-center justify-center rounded-lg text-lg bg-indigo-600 text-white px-4 py-2 ml-2 hover:bg-indigo-700 transition duration-300"
+            className="flex items-center justify-center rounded-lg text-lg bg-gradient-to-r from-blue-950 to-blue-500 hover:bg-gradient-to-r text-white px-4 py-2 ml-2 hover:bg-indigo-700 transition duration-300"
           >
             <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
             Send
