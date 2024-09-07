@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+import { Roboto } from "@next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,6 +9,11 @@ import "@uploadthing/react/styles.css";
 
 const APP_NAME = "L.F.E.M.H.S.S";
 const APP_DESCRIPTION = "This is an example of using next-pwa";
+const roboto = Roboto({
+  weight: ['400', '500', '700'], // Customize the weights
+  subsets: ['latin'],
+  variable: '--font-roboto', // Define a custom variable for Tailwind
+});
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -37,9 +43,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className=" text-white bg-slate-950">
+    <html lang="en" dir="ltr" className="text-white obsidean">
       <ToastContainer />
-      <body className="bg-slate-950">
+      <body className={`${roboto.variable} obsidean`}>
         {children}
         <Analytics />
       </body>

@@ -10,7 +10,10 @@ import {
   faCalendarTimes,
   faCog,
   faSignOutAlt,
-  faMicrochip,
+  faTicket,
+  faUser,
+  faRegistered,
+  faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -21,6 +24,7 @@ import Absent from "../tabs/Absent";
 import Events from "../tabs/Events";
 import Resource from "../tabs/Resources";
 import OnlineEvents from "../tabs/Online_Events";
+import Registration from "../tabs/Registration";
 
 export default function Navbar() {
   const [activeTab, setActiveTab] = useState("Home");
@@ -28,22 +32,22 @@ export default function Navbar() {
 
   const tabs = [
     { label: "Home", icon: faHome },
-    { label: "Students Resource", icon: faUserGraduate },
+    { label: "Registration", icon: faListCheck },
     { label: "Upcoming Events", icon: faCalendarCheck }, // changed icon
     { label: "Support", icon: faLifeRing }, // changed icon
     { label: "Online Events", icon: faVideo }, // changed icon
     { label: "Notifications", icon: faBell },
-    { label: "Absent Days", icon: faCalendarTimes },
-    { label: "Ask AI", icon: faMicrochip}, // changed icon
-    { label: "Settings", icon: faCog },
+    // { label: "Absent Days", icon: faCalendarTimes }, // changed icon
+    { label: "Hall Ticket", icon: faTicket},
+    { label: "Profile", icon: faUser }
   ];
-
+  
   const renderContent = () => {
     switch (activeTab) {
       case "Home":
         return <Home />;
-      case "Students Resource":
-        return <Resource/>;
+      case "Registration":
+        return <Registration/>;
       case "Upcoming Events":
         return <Events />;
       case "Support":
@@ -52,18 +56,14 @@ export default function Navbar() {
         return <OnlineEvents />;
       case "Notifications":
         return <Notifications />;
-      case "Absent Days":
+      case "Hall Ticket":
         return <Absent />;
-        case "Ask AI":
-        return <div>Settings Content</div>;
       case "Settings":
         return <div>Settings Content</div>;
       default:
         return null;
     }
   };
-
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -128,9 +128,9 @@ export default function Navbar() {
                   key={tab.label}
                   className={`cursor-pointer ${
                     activeTab === tab.label
-                      ? "bg-purple-700 text-white"
-                      : "bg-gray-800 text-gray-400"
-                  } hover:bg-purple-600 rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
+                      ? "bg-gradient-to-r from-blue-900 to-blue-600 text-white"
+                      : "bg-gradient-to-r from-gray-900 to-gray-800 text-gray-200"
+                  } hover:grad-bg-light rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
                   onClick={() => setActiveTab(tab.label)}
                 >
                   <FontAwesomeIcon icon={tab.icon} className="pt-1" />

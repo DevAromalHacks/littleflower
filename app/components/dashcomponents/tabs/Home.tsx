@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <section className="text-white">
       <div className="p-0 md:p-6 lg:p-6">
-        <div className="grad-anime p-4 md:p-6 lg:p-6 rounded-lg mb-6">
+        <div className="grad-anime bg-gradient-to-l from-blue-900 to-blue-600 p-4 md:p-6 lg:p-6 rounded-lg mb-6">
           <div className="flex items-end justify-end mb-6">
             <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center">
               <h1 className="text-center text-2xl text-white">{firstLetter}</h1>
@@ -72,44 +72,6 @@ export default function Home() {
             {greeting}, {name} 🎉
           </h1>
           <p className="text-xl text-white">{quote}</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-teal-500 shadow-lg rounded p-4">
-            <h2 className="text-xl mb-2">Quick Stats</h2>
-            <ul className="font-serif">
-              <li>Total Assignments: 10</li>
-              <li>Pending Tasks: 3</li>
-            </ul>
-          </div>
-          <div className="bg-yellow-500 shadow-lg rounded p-4">
-            <h2 className="text-xl mb-2">Recent Activities</h2>
-            <ul className="font-serif">
-              <li>Assignment 1 graded</li>
-              <li>New course material added</li>
-              <li>Meeting scheduled for Monday</li>
-            </ul>
-          </div>
-          <div className="bg-purple-500 shadow-lg rounded p-4">
-            <h2 className="text-xl mb-2">Upcoming Events</h2>
-            <ul className="font-serif">
-              <li>Math Test - May 22</li>
-              <li>Science Fair - May 20</li>
-            </ul>
-          </div>
-          <div className="bg-green-500 shadow-lg rounded p-4">
-            <h2 className="text-xl mb-2">To-Do List</h2>
-            <ul className="font-serif">
-              <li>Complete Math Homework</li>
-              <li>Submit English Essay</li>
-            </ul>
-          </div>
-          <div className="bg-red-500 shadow-lg rounded p-4">
-            <h2 className="text-xl mb-2">Notifications</h2>
-            <ul className="font-serif">
-              <li>New Message from Mr. Smith</li>
-              <li>Assignment Feedback available</li>
-            </ul>
-          </div>
         </div>
       </div>
     </section>

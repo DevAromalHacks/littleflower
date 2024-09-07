@@ -222,8 +222,8 @@ body {
 }
 
 .grad-anime {
-    background: linear-gradient(to right top, #bb0049, #af2658, #a23964, #93466c, #84516f, #815c7f, #7b688d, #767397, #6589b4, #40a0c8, #00b7cc, #12ccc0);
-    background-size: 400% 400%;
+    /* background-image: linear-gradient(to right top, #764bdf, #5a4ac9, #4246b2, #2d419a, #1e3a81, #1d4283, #214a85, #275286, #346da3, #4189c1, #4fa7de, #5fc5fb);
+    background-size: 400% 400%; */
     animation: anime 10s ease infinite;
 }
 
@@ -252,33 +252,39 @@ body {
     .disp_none {
         display: none;
     }
+
     .disp_block {
         display: block;
     }
 }
+
 @media (max-width: 1023px) {
     .disp_none {
         display: none;
     }
+
     .disp_block {
         display: block;
     }
 }
+
 @media (min-width: 1024px) {
     .displ_none {
         display: none;
     }
+
     .displ_block {
         display: block;
     }
 }
+
 @media print {
     .print\\:hidden {
-      display: none !important;
+        display: none !important;
     }
-  }
-  
-  .nav-overlay {
+}
+
+.nav-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -290,10 +296,12 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  .obsidean{
+}
+
+.obsidean {
     background: #0B1215;
-  }
-  .oil-black{
+}
+
+.oil-black {
     background: #000b0b;
-  }
+}

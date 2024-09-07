@@ -67,7 +67,7 @@ export default function Navbar() {
             <NavItem href="/gallery">Gallery</NavItem>
             <NavItem href="/contact">Contact</NavItem>
             <Button
-              href="#"
+              href="/dashboard/dash/dashboard"
               title="LOGIN"
               className="bg-transparent py-2 px-10 text-lg border border-[#00AEEF] text-[#3669c8] hover:bg-[#00AEEF] hover:text-black transition duration-300"
             />
@@ -85,7 +85,7 @@ export default function Navbar() {
           </ul>
           <Button
             disabled={true}
-            href="#"
+            href="/dashboard/dash/dashboard"
             title="LOGIN"
             className="bg-transparent py-2 px-10 text-lg border border-[#00AEEF] text-[#3669c8] hover:bg-[#00AEEF] hover:text-black transition duration-300"
           />

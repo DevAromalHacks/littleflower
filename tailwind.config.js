@@ -17,20 +17,14 @@ module.exports = {
       },
     },
     extend: {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#002366',
-            'sky-blue': '#00AEEF',
-            'dark-gray': '#333333',
-            'light-gray': '#F5F5F5',
-            'cyan-500': '#00AEEF',
-            'cyan-600': '#008CBA',
-          },
-        },
+      colors: {
+        navy: '#002366',
+        'sky-blue': '#00AEEF',
+        'dark-gray': '#333333',
+        'light-gray': '#F5F5F5',
+        'cyan-500': '#00AEEF',
+        'cyan-600': '#008CBA',
       },
-      variants: {},
-      plugins: [],
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -49,6 +43,5 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-animate"),
-   
   ],
 };

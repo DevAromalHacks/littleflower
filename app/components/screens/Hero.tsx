@@ -51,7 +51,7 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative z-50 font-serif mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-roboto text-white relative z-50 font-serif mb-6">
               Empowering Minds, Igniting Futures: <br /> Welcome to Little Flower
             </h1>
             <div className="flex flex-wrap justify-center gap-4">
@@ -68,7 +68,7 @@ export default function Hero() {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="bg-cyan-600 mt-5 text-black rounded-md px-8 py-3 hover:bg-cyan-700 transition duration-300 ease-in-out font-bold"
+                  className="bg-cyan-500 mt-5 text-black rounded-md px-8 py-3 hover:bg-cyan-700 transition duration-300 ease-in-out font-bold"
                 >
                   Enroll Now
                 </motion.button>
