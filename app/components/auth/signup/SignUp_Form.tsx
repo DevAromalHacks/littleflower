@@ -49,6 +49,7 @@ export default function SignUpForm() {
           div,
           date_of_birth,
           talent: talent === "Others" ? otherTalent : talent,
+          password
         },
       ]);
 
