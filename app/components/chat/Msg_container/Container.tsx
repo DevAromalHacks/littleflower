@@ -166,8 +166,8 @@ export default function Msg_Container() {
               <div
                 className={`p-3 w-auto max-w-xs text-xl md:max-w-sm lg:max-w-md rounded-l-xl rounded-br-xl ${
                   message.user_id === user?.id
-                    ? "bg-gradient-to-r from-blue-950 to-blue-500 hover:bg-gradient-to-r text-white text-right"
-                    : "bg-gray-200 text-gray-800"
+                    ? "bg-gradient-to-r from-blue-950 to-blue-500 text-white text-right"
+                    : "bg-gradient-to-r from-purple-950 to-purple-600 text-white text-right"
                 }`}
                 onClick={() => {
                   if (message.user_id !== user?.id) {
@@ -180,7 +180,7 @@ export default function Msg_Container() {
             </div>
             {message.reply && (
               <div className="flex justify-start px-2 mt-2">
-                <div className="bg-purple-600 text-xl text-white rounded-r-xl rounded-bl-xl p-3 max-w-xs md:max-w-sm lg:max-w-md">
+                <div className="bg-gradient-to-r from-purple-950 to-purple-600 text-xl text-white rounded-r-xl rounded-bl-xl p-3 max-w-xs md:max-w-sm lg:max-w-md">
                   {message.reply}
                 </div>
               </div>
