@@ -11,7 +11,7 @@ export default function Eligibility() {
           className="pt-1 w-20 h-20 text-green-500" 
         />
         <h2 className="text-center text-white text-xl mt-4">
-            You are not eligible for collecting the hall ticket. <br /> <Link href="/hallticket" className="text-blue-600">Click here </Link>to download your hallticket
+            You are eligible for collecting the hall ticket. <br /> <Link href="/hallticket" className="text-blue-600">Click here </Link>to download your hallticket
         </h2>
       </div>
     </section>
