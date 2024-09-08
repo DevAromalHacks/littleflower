@@ -162,7 +162,7 @@ export default function Msg_Container() {
           </div>
         ))}
       </div>
-      <div className="p-10">
+      <div className="py-10">
         <form
           className="flex items-center justify-center"
           onSubmit={(e) => {
