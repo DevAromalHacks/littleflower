@@ -30,22 +30,15 @@ export default function Msg_Container() {
           console.error("Error fetching user:", error);
         } else if (data) {
           setUser(data);
-          console.log("User data fetched:", data); // Debug: log user data
-        } else {
-          console.log("No user data found for email:", userEmail);
         }
-      } else {
-        console.log("No email found in localStorage");
       }
     };
     fetchUserData();
   }, []);
 
+  // Fetch messages
   const fetchMessages = async () => {
-    if (!user) {
-      console.warn("User data is missing");
-      return;
-    }
+    if (!user) return;
 
     const { name, className, div } = user;
 
@@ -55,76 +48,45 @@ export default function Msg_Container() {
       .eq("Username", name)
       .eq("className", className)
       .eq("div", div)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: true });
 
     if (error) {
       console.error("Error fetching messages:", error);
-    } else if (data) {
-      setMessages(data);
-      console.log("Messages fetched:", data); // Debug: log fetched messages
     } else {
-      console.log("No messages found");
+      setMessages(data || []);
     }
   };
 
+  // Polling logic to check for new messages every second
   useEffect(() => {
-    // Fetch initial messages when component mounts
-    fetchMessages();
+    const intervalId = setInterval(() => {
+      fetchMessages();
+    }, 1000); // Check every 1 second
 
-    // Set up real-time subscription to messages table
-    const messageChannel = supabase
-      .channel("public:messages")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages" },
-        (payload) => {
-          // When a new message is inserted, update messages state
-          setMessages((prevMessages) => [payload.new, ...prevMessages]);
-          console.log("New message received!");
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(messageChannel);
-    };
-  }, [user]); // Added user to dependency array to refetch messages when user data changes
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
+  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
   const handleSendMessage = async () => {
-    if (!user) {
-      console.warn("User data is missing");
-      return;
-    }
-  
-    if (inputValue.trim() === "") {
-      console.warn("Input value is empty");
-      return;
-    }
-  
-    console.log("Attempting to send message:", inputValue); // Debug log
-  
+    if (!user || inputValue.trim() === "") return;
+
     if (selectedMessageId) {
-      // Handle reply
-      const { error: updateError } = await supabase
+      const { error } = await supabase
         .from("messages")
         .update({ reply: inputValue })
         .eq("id", selectedMessageId)
         .neq("user_id", user.id);
-  
-      if (updateError) {
+
+      if (error) {
         toast.error("Error sending reply");
-        console.error("Error sending reply:", updateError);
       } else {
-        console.log("Reply sent");
-        setSelectedMessageId(null); // Deselect the message
-        fetchMessages(); // Refresh messages
+        setSelectedMessageId(null);
+        fetchMessages();
       }
     } else {
-      // Handle new message
       const { data, error } = await supabase
         .from("messages")
         .insert([
@@ -138,24 +100,36 @@ export default function Msg_Container() {
           },
         ])
         .select();
-  
+
       if (error) {
-        console.error("Error storing message:", error); // Log Supabase error
-      } else if (data) {
-        console.log("Message stored successfully:", data); // Check data returned from Supabase
+        console.error("Error storing message:", error);
+      } else {
         setMessages((prevMessages) => [data[0], ...prevMessages]);
-        console.log("Updated messages state:", messages); // Log updated messages state
       }
     }
-  
-    // Clear the input field
     setInputValue("");
   };
-  
 
   return (
-    <section className="p-6 h-screen flex flex-col justify-between">
-      <div className="flex-grow flex flex-col-reverse overflow-y-auto max-h-[35rem]">
+    <section className="h-screen flex flex-col">
+      <header className="grad-anime bg-gradient-to-l from-blue-900 to-blue-600 w-full h-36 rounded-lg flex items-center justify-between px-6 shadow-lg z-10">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-md">
+            <FontAwesomeIcon
+              icon={faPaperPlane}
+              className="text-blue-600 text-2xl"
+            />
+          </div>
+          <h1 className="text-white text-2xl font-bold tracking-wider">
+            LF is Online
+          </h1>
+        </div>
+        <div className="hidden md:flex items-center space-x-4">
+          <span className="text-gray-300 text-sm">Status: Online</span>
+          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+        </div>
+      </header>
+      <div className="flex-grow overflow-y-auto p-4 max-h-[calc(100vh-5rem)]">
         {messages.map((message) => (
           <div key={message.id} className="my-2">
             <div
@@ -188,12 +162,12 @@ export default function Msg_Container() {
           </div>
         ))}
       </div>
-      <div>
+      <div className="p-10">
         <form
           className="flex items-center justify-center"
           onSubmit={(e) => {
-            e.preventDefault(); // Prevent form from refreshing the page
-            handleSendMessage(); // Call the function to send the message
+            e.preventDefault();
+            handleSendMessage();
           }}
         >
           <input

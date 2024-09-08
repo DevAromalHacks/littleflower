@@ -77,7 +77,7 @@ export default function Sidebar() {
   };
 
   return (
-    <section>
+    <section className="overflow-y-hidden">
       <div className="disp_block displ_none">
         <StudentsSideHam />
       </div>
