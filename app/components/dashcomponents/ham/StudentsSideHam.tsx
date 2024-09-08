@@ -81,7 +81,7 @@ export default function Navbar() {
   }, [isMenuOpen]);
 
   return (
-    <section className="pb-4 block md:block lg:hidden">
+    <section className="pb-4 block md:block lg:hidden overflow-y-hidden">
       <div className="absolute top-0 left-0">
         <nav className="h-20 w-full py-8 fixed z-50 lg:flex lg:justify-between lg:items-center">
           <div className="flex justify-between items-center w-full px-2 lg:px-0">
