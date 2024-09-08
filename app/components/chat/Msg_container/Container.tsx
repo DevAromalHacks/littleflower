@@ -173,7 +173,7 @@ export default function Msg_Container() {
           <input
             type="text"
             placeholder="Type your message or reply..."
-            className="flex-grow rounded-lg bg-gray-200 pl-4 w-full pr-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-grow rounded-lg bg-transparent pl-4 w-full pr-4 py-2 text-lg border text-sky-300 border-blue-700 placeholder:text-sky-300"
             value={inputValue}
             onChange={handleInputChange}
           />
