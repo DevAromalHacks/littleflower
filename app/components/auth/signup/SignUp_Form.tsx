@@ -17,8 +17,7 @@ export default function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [date_of_birth, setDate_Of_Birth] = useState("");
-  const [talent, setTalent] = useState("");
-  const [otherTalent, setOtherTalent] = useState("");
+  const [admission_no, setAdmission_no] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const supabase = createClientComponentClient();
   const router = useRouter();
@@ -48,8 +47,8 @@ export default function SignUpForm() {
           className,
           div,
           date_of_birth,
-          talent: talent === "Others" ? otherTalent : talent,
-          password
+          admission_no,
+          password,
         },
       ]);
 
@@ -258,42 +257,23 @@ export default function SignUpForm() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="dob" className="py-1 text-white">
-                    Talents
+                  <label htmlFor="admission_no" className="py-1 text-white">
+                    Admission No
                   </label>
                   <br />
                   <div className="mt-2 mb-2">
-                    <select
-                      name="talent"
-                      id="talent"
+                    <input
+                      name="admission_no"
+                      id="admission_no"
+                      type="tel"
+                      maxLength={5}
                       required
-                      value={talent}
-                      onChange={(e) => setTalent(e.target.value)}
+                      placeholder="Enter Admission No"
+                      value={admission_no}
+                      onChange={(e) => setAdmission_no(e.target.value)}
                       className="text-black px-3 w-64 h-10 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                    >
-                      <option value="">Select Your talent</option>
-                      <option value="Dancing">Dancing</option>
-                      <option value="Singing">Singing</option>
-                      <option value="Sports">Sports</option>
-                      <option value="Reseaching">Reseaching</option>
-                      <option value="Coding">Coding</option>
-                      <option value="Others">Others</option>
-                    </select>
+                    />
                   </div>
-                  {talent === "Others" && (
-                    <div className="mt-2 mb-2">
-                      <input
-                        type="text"
-                        name="otherTalent"
-                        id="otherTalent"
-                        value={otherTalent}
-                        required
-                        onChange={(e) => setOtherTalent(e.target.value)}
-                        placeholder="Specify your talent"
-                        className="text-black px-3 w-64 h-10 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
               <div className="flex items-center justify-center py-10">
