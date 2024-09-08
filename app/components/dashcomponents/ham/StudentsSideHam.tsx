@@ -22,13 +22,15 @@ import Notifications from "../tabs/Notifications";
 import Home from "../tabs/Home";
 import Absent from "../tabs/Absent";
 import Events from "../tabs/Events";
-import Resource from "../tabs/Resources";
+import Modal from "../tabs/model/Model";
 import OnlineEvents from "../tabs/Online_Events";
 import Registration from "../tabs/Registration";
+import LogOut from "../tabs/Logout";
 
 export default function Navbar() {
   const [activeTab, setActiveTab] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const tabs = [
     { label: "Home", icon: faHome },
@@ -38,16 +40,16 @@ export default function Navbar() {
     { label: "Online Events", icon: faVideo }, // changed icon
     { label: "Notifications", icon: faBell },
     // { label: "Absent Days", icon: faCalendarTimes }, // changed icon
-    { label: "Hall Ticket", icon: faTicket},
-    { label: "Profile", icon: faUser }
+    { label: "Hall Ticket", icon: faTicket },
+    { label: "Profile", icon: faUser },
   ];
-  
+
   const renderContent = () => {
     switch (activeTab) {
       case "Home":
         return <Home />;
       case "Registration":
-        return <Registration/>;
+        return <Registration />;
       case "Upcoming Events":
         return <Events />;
       case "Support":
@@ -66,6 +68,14 @@ export default function Navbar() {
   };
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  
+  const handleLogoutClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -140,7 +150,10 @@ export default function Navbar() {
             </nav>
 
             <div className="mb-4 px-2">
-              <div className="flex space-x-2 py-4 px-4 bg-red-600 hover:bg-red-700 rounded cursor-pointer items-center">
+              <div
+                className="flex space-x-2 py-4 px-4 bg-red-600 hover:bg-red-700 rounded cursor-pointer items-center"
+                onClick={handleLogoutClick}
+              >
                 <FontAwesomeIcon icon={faSignOutAlt} className="pt-1" />
                 <span>Logout</span>
               </div>
@@ -151,6 +164,11 @@ export default function Navbar() {
       <main className="flex-grow p-8 text-gray-600 text-2xl obsidean">
         {renderContent()}
       </main>
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <LogOut />
+        </Modal>
+      )}
     </section>
   );
 }
