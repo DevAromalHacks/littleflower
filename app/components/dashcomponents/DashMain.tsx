@@ -27,7 +27,7 @@ import Modal from "./tabs/model/Model";
 import OnlineEvents from "./tabs/Online_Events";
 import LogOut from "./tabs/Logout";
 import Registration from "./tabs/Registration";
-import { FaRegListAlt } from "react-icons/fa";
+import Halltickets from "./tabs/halltickets/Hallmain";
 
 export default function Sidebar() {
   const [activeTab, setActiveTab] = useState("Home");
@@ -60,7 +60,7 @@ export default function Sidebar() {
       case "Notifications":
         return <Notifications />;
       case "Hall Ticket":
-        return <Absent />;
+        return <Halltickets />;
       case "Settings":
         return <div>Settings Content</div>;
       default:

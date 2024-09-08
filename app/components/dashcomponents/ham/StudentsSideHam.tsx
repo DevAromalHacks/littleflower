@@ -26,6 +26,7 @@ import Modal from "../tabs/model/Model";
 import OnlineEvents from "../tabs/Online_Events";
 import Registration from "../tabs/Registration";
 import LogOut from "../tabs/Logout";
+import Halltickets from "../tabs/halltickets/Hallmain";
 
 export default function Navbar() {
   const [activeTab, setActiveTab] = useState("Home");
@@ -39,7 +40,6 @@ export default function Navbar() {
     { label: "Support", icon: faLifeRing }, // changed icon
     { label: "Online Events", icon: faVideo }, // changed icon
     { label: "Notifications", icon: faBell },
-    // { label: "Absent Days", icon: faCalendarTimes }, // changed icon
     { label: "Hall Ticket", icon: faTicket },
     { label: "Profile", icon: faUser },
   ];
@@ -59,7 +59,7 @@ export default function Navbar() {
       case "Notifications":
         return <Notifications />;
       case "Hall Ticket":
-        return <Absent />;
+        return <Halltickets />;
       case "Settings":
         return <div>Settings Content</div>;
       default:
