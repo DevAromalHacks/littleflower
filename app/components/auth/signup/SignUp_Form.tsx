@@ -91,7 +91,7 @@ export default function SignUpForm() {
     <section>
       <div>
         <div>
-          <div className="w-full h-full text-black box-shad bg-black border border-teal-500 rounded-md flex justify-center px-4">
+          <div className="w-full h-full text-black box-shad bg-black border-2 border-teal-500 rounded-md flex justify-center px-4">
             <div>
               <div>
                 <h1 className="text-center font-bold text-white text-3xl py-10">
