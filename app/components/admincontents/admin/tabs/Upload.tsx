@@ -6,13 +6,15 @@ import {
   faUpload,
   faBell,
   faCloudUploadAlt,
-  faBookmark
+  faBookmark,
+  faTicketSimple
 } from "@fortawesome/free-solid-svg-icons";
 import Modal_component from "./model/Modal_Component";
 import Upload_Image from "./model/Upload_Module";
 import StudentUpload from "./model/Student_Upload";
 import NotificationUpload from "./model/Notification_Upload";
 import Ce from "./model/CE_Upload"
+import Ticket_Details from "./model/Ticket_Details"
 
 export default function Upload() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,7 +82,22 @@ export default function Upload() {
             <p className="text-gray-400">Upload students CE mark</p>
           </div>
         </div>
+        <div
+          className="bg-gray-700 p-6 rounded-lg flex items-center justify-center cursor-pointer"
+          onClick={() => handleOpenModal("Ticket_Details")}
+        >
+          <div className="text-center">
+            <FontAwesomeIcon
+              icon={faTicketSimple}
+              className="text-4xl mb-4"
+            />
+            <p className="text-lg font-semibold">Upload Tickets</p>
+            <p className="text-gray-400">Upload students ticket details</p>
+          </div>
+        </div>
       </div>
+
+      
 
       {isModalOpen && (
         <Modal_component onClose={handleCloseModal}>
@@ -90,6 +107,7 @@ export default function Upload() {
           {modalContent === "studentDetails" && <StudentUpload /> }
           {modalContent === "notification" && <NotificationUpload/>}
           {modalContent === "studentsCe" && <Ce/>}
+          {modalContent === "Ticket_Details" && <Ticket_Details/>}
         </Modal_component>
       )}
     </section>
