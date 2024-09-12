@@ -3,9 +3,12 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
-import LoginPromptModal from "./LoginPromptModal"; // Import the modal component
+import {
+  faHeart,
+  faPaperPlane,
+  faShareAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import LoginPromptModal from "./LoginPromptModal";
 
 const supabase = createClientComponentClient();
 
@@ -15,18 +18,31 @@ interface ImageData {
   title: string;
   description: string;
   likes: number;
+  comments: string; // Add comments field
+}
+interface User {
+  id: number;
+  email: string;
+  className: string;
+  name: string;
+  div: string;
 }
 
 const ImageGallery: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
   const [images, setImages] = useState<ImageData[]>([]);
   const [model, setModel] = useState(false);
   const [tempSrc, setTempSrc] = useState("");
   const [tempDescription, setTempDescription] = useState("");
   const [tempLikes, setTempLikes] = useState(0);
+  const [tempImageId, setTempImageId] = useState<number | null>(null);
   const [galleryColumns, setGalleryColumns] = useState(3);
   const [likedImages, setLikedImages] = useState<Set<number>>(new Set());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginPromptOpen, setLoginPromptOpen] = useState(false); // State for the modal
+  const [loginPromptOpen, setLoginPromptOpen] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState<string[]>([]); // For storing all comments
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -42,7 +58,7 @@ const ImageGallery: React.FC = () => {
       try {
         const { data, error } = await supabase
           .from("Upload")
-          .select("id, secure_url, title, likes");
+          .select("id, secure_url, title, likes, comments");
 
         if (error) {
           throw error;
@@ -54,12 +70,14 @@ const ImageGallery: React.FC = () => {
             secure_url: string;
             title: string;
             likes: number;
+            comments: string;
           }) => ({
             id: item.id,
             src: item.secure_url,
             title: item.title,
             description: item.title,
             likes: item.likes || 0,
+            comments: item.comments || "",
           })
         );
 
@@ -76,15 +94,24 @@ const ImageGallery: React.FC = () => {
     }
   }, []);
 
-  const getImg = (src: string, description: string, likes: number) => {
+  const getImg = (
+    src: string,
+    description: string,
+    likes: number,
+    id: number,
+    existingComments: string
+  ) => {
     setTempSrc(src);
     setTempDescription(description);
     setTempLikes(likes);
+    setTempImageId(id);
+    setComments(existingComments ? existingComments.split("|") : []);
     setModel(true);
   };
 
   const handleClose = () => {
     setModel(false);
+    setComment(""); // Reset the comment box on close
   };
 
   const updateColumns = () => {
@@ -112,7 +139,7 @@ const ImageGallery: React.FC = () => {
     event.stopPropagation();
 
     if (!isLoggedIn) {
-      setLoginPromptOpen(true); // Open the modal
+      setLoginPromptOpen(true);
       return;
     }
 
@@ -123,11 +150,9 @@ const ImageGallery: React.FC = () => {
     let newLikedImages = new Set(likedImages);
 
     if (likedImages.has(id)) {
-      // Unlike the image
       updatedLikes -= 1;
       newLikedImages.delete(id);
     } else {
-      // Like the image
       updatedLikes += 1;
       newLikedImages.add(id);
     }
@@ -155,6 +180,67 @@ const ImageGallery: React.FC = () => {
     );
   };
 
+  const handleShareClick = (event: React.MouseEvent, src: string) => {
+    event.stopPropagation();
+
+    if (navigator.share) {
+      navigator.share({
+        title: "Check out this image",
+        url: src,
+      });
+    } else {
+      navigator.clipboard.writeText(src);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    if (!isLoggedIn) {
+      setLoginPromptOpen(true);
+      return;
+    }
+
+    if (!tempImageId || !comment.trim()) return;
+
+    const updatedComments = [...comments, comment];
+    const commentString = updatedComments.join("|");
+
+    const { error } = await supabase
+      .from("Upload")
+      .update({ comments: commentString })
+      .eq("id", tempImageId);
+
+    if (error) {
+      console.error("Error submitting comment:", error);
+      return;
+    }
+
+    setComments(updatedComments);
+    setComment("");
+  };
+
+  useEffect(() => {
+    const userEmail = localStorage.getItem("userEmail");
+    if (userEmail) {
+      const fetchUser = async () => {
+        try {
+          const { data: userData, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq("email", userEmail)
+            .single();
+
+          if (error) throw error;
+          setUser(userData);
+        } catch (error) {
+          console.log("error occurred", error);
+        }
+      };
+      fetchUser();
+    }
+  }, [supabase]);
+
   return (
     <>
       <LoginPromptModal
@@ -163,6 +249,7 @@ const ImageGallery: React.FC = () => {
       />
       <div>
         <div
+          className="obsidean overflow-y-scroll"
           style={{
             width: "100%",
             height: "100vh",
@@ -173,13 +260,12 @@ const ImageGallery: React.FC = () => {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            backgroundColor: "#333",
             transition:
               "opacity 0.4s ease, visibility 0.4s ease, transform 0.5s ease-in-out",
             visibility: model ? "visible" : "hidden",
             opacity: model ? 1 : 0,
             transform: model ? "scale(1)" : "scale(0)",
-            overflow: "auto",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
             zIndex: 999,
           }}
         >
@@ -192,22 +278,77 @@ const ImageGallery: React.FC = () => {
               <div className="w-8 h-1 bg-white -rotate-45 translate-y-4"></div>
             </div>
           </button>
-          <img
-            src={tempSrc}
-            alt="enlarged"
-            style={{
-              width: "auto",
-              maxWidth: "100%",
-              maxHeight: "calc(100vh - 80px)",
-              display: "block",
-              boxSizing: "border-box",
-              padding: "40px 0 20px",
-              margin: "0 auto",
-            }}
-          />
-          <div className="px-10">
-            <p className="text-center">{tempDescription}</p>
-            <p className="">Likes: {tempLikes}</p>
+          <div className="flex flex-wrap items-center justify-center gap-10">
+            <img
+              src={tempSrc}
+              alt="enlarged"
+              style={{
+                width: "auto",
+                maxWidth: "100%",
+                maxHeight: "calc(100vh - 80px)",
+                display: "block",
+                padding: "40px 0 20px",
+                margin: "0 auto",
+                boxShadow: "0 4px 8px rgba(0,0,0,0.5)",
+              }}
+            />
+            {/* Comment Section */}
+            <div className="w-full lg:w-[400px] md:w-[400px] mt-10 obsidean rounded-lg shadow-lg h-[600px] flex flex-col">
+              <header className="pt-4 px-6 border-b border-gray-300">
+                <h2 className="text-2xl font-bold text-center pb-2">
+                  Comments
+                </h2>
+              </header>
+              <ul className="flex-1 overflow-auto bg-stone-950 px-6 py-4">
+                {comments.map((comment, index) => (
+                  <li key={index} className="mb-2 px-2 shadow-sm">
+                    <span className="text-gray-300 font-bold">
+                      {user?.name} :
+                    </span>{" "}
+                    <span className="text-white">{comment}</span>
+                  </li>
+                ))}
+              </ul>
+              {isLoggedIn ? (
+                <div className="flex border-t border-gray-300">
+                  <input
+                    type="text"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    className="w-full h-12 rounded-lg border-gray-300 bg-transparent pl-3 py-2 focus:outline-none pr-10"
+                    placeholder="Add a comment..."
+                  />
+                  <button
+                    onClick={handleCommentSubmit}
+                    className="text-blue-600 relative -mr-4 right-8 flex items-center justify-center focus:outline-none"
+                  >
+                    <FontAwesomeIcon icon={faPaperPlane} className="w-6 h-6" />
+                  </button>
+                </div>
+              ) : (
+                <p className="text-red-500 text-center mt-4">
+                  Log in to add a comment.
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="px-10 mt-4">
+            <p className="text-center text-white">{tempDescription}</p>
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <FontAwesomeIcon
+                icon={faHeart}
+                className="w-8 h-8 text-red-500"
+              />
+              <p className="text-white">{tempLikes}</p>
+              <FontAwesomeIcon
+                icon={faShareAlt}
+                className="w-8 h-8 text-white cursor-pointer"
+                onClick={(e) => handleShareClick(e, tempSrc)}
+              />
+            </div>
+            {showCopied && (
+              <p className="text-center text-green-400 mt-2">Copied!</p>
+            )}
           </div>
         </div>
 
@@ -224,7 +365,13 @@ const ImageGallery: React.FC = () => {
               className="media"
               key={image.id}
               onClick={() =>
-                getImg(image.src, image.description, image.likes)
+                getImg(
+                  image.src,
+                  image.description,
+                  image.likes,
+                  image.id,
+                  image.comments
+                )
               }
               style={{
                 transition: "all 350ms ease",
@@ -236,8 +383,8 @@ const ImageGallery: React.FC = () => {
               <FontAwesomeIcon
                 icon={faHeart}
                 onClick={(e) => handleLikeClick(e, image.id)}
-                className={`absolute top-2 left-2 w-8 h-8 cursor-pointer ${
-                  likedImages.has(image.id) ? "text-red-500" : "text-white"
+                className={`absolute top-2 left-2 w-4 h-4 cursor-pointer ${
+                  likedImages.has(image.id) ? "text-red-700" : "text-white"
                 }`}
               />
               <Image
@@ -245,7 +392,7 @@ const ImageGallery: React.FC = () => {
                 alt={image.title}
                 width={500}
                 height={700}
-                className="w-full h-full cursor-pointer"
+                className="w-full h-full cursor-pointer hover:opacity-75 transition-opacity duration-300"
               />
             </div>
           ))}
