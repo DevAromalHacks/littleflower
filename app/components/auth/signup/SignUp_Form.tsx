@@ -22,9 +22,41 @@ export default function SignUpForm() {
   const supabase = createClientComponentClient();
   const router = useRouter();
 
-  const handleSignUp = async () => {
+  const validateForm = () => {
+    if (
+      !name ||
+      !email ||
+      !className ||
+      !div ||
+      !date_of_birth ||
+      !admission_no ||
+      !password ||
+      !confirmPassword
+    ) {
+      toast.error("Please fill in all fields.");
+      return false;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+
+    if (password.length < 8) {
+      toast.error("Password should be at least 8 characters.");
+      return false;
+    }
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSignUp = async () => {
+    if (!validateForm()) {
       return;
     }
 
@@ -86,7 +118,7 @@ export default function SignUpForm() {
     const rearrangedDate = `${year}/${month}/${day}`;
     return rearrangedDate;
   };
-
+  
   return (
     <section>
       <div>
@@ -194,7 +226,7 @@ export default function SignUpForm() {
                       name="password"
                       id="password"
                       required
-                      maxLength={8}
+                      maxLength={100}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Enter your password"
@@ -221,7 +253,7 @@ export default function SignUpForm() {
                       name="password"
                       id="confirm-password"
                       required
-                      maxLength={8}
+                      maxLength={100}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Enter your password"

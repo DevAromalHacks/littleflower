@@ -31,13 +31,13 @@ export default function Upload() {
   };
 
   return (
-    <section className="bg-gray-800 text-white p-8 rounded-lg shadow-md">
+    <section className="obsidean text-white p-8 rounded-lg shadow-md">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Upload Content</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div
-          className="bg-gray-700 p-6 rounded-lg flex items-center justify-center cursor-pointer"
+          className="bg-gradient-to-r from-cyan-950 to-sky-900 hover:bg-gradient-to-l p-6 rounded-lg flex items-center justify-center cursor-pointer"
           onClick={() => handleOpenModal("image")}
         >
           <div className="text-center">
@@ -47,7 +47,7 @@ export default function Upload() {
           </div>
         </div>
         <div
-          className="bg-gray-700 p-6 rounded-lg flex items-center cursor-pointer justify-center"
+          className="bg-gradient-to-r from-cyan-950 to-sky-900 hover:bg-gradient-to-l p-6 rounded-lg flex items-center cursor-pointer justify-center"
           onClick={() => handleOpenModal("notification")}
         >
           <div className="text-center">
@@ -57,7 +57,7 @@ export default function Upload() {
           </div>
         </div>
         <div
-          className="bg-gray-700 p-6 rounded-lg flex items-center justify-center cursor-pointer"
+          className="bg-gradient-to-r from-cyan-950 to-sky-900 hover:bg-gradient-to-l p-6 rounded-lg flex items-center justify-center cursor-pointer"
           onClick={() => handleOpenModal("studentDetails")}
         >
           <div className="text-center">
@@ -70,7 +70,7 @@ export default function Upload() {
           </div>
         </div>
         <div
-          className="bg-gray-700 p-6 rounded-lg flex items-center justify-center cursor-pointer"
+          className="bg-gradient-to-r from-cyan-950 to-sky-900 hover:bg-gradient-to-l p-6 rounded-lg flex items-center justify-center cursor-pointer"
           onClick={() => handleOpenModal("studentsCe")}
         >
           <div className="text-center">
@@ -83,7 +83,7 @@ export default function Upload() {
           </div>
         </div>
         <div
-          className="bg-gray-700 p-6 rounded-lg flex items-center justify-center cursor-pointer"
+          className="bg-gradient-to-r from-cyan-950 to-sky-900 hover:bg-gradient-to-l p-6 rounded-lg flex items-center justify-center cursor-pointer"
           onClick={() => handleOpenModal("Ticket_Details")}
         >
           <div className="text-center">

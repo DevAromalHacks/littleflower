@@ -30,6 +30,8 @@ export default function Navbar() {
     };
   }, [isMenuOpen]);
 
+  const email = localStorage.getItem("userEmail");
+
   return (
     <nav className="backdrop-blur-md backdrop-brightness-40 h-20 w-full fixed top-0 left-0 right-0 z-50 lg:flex lg:justify-between lg:items-center px-5 lg:px-20">
       <div className="flex justify-between items-center w-full">
@@ -67,8 +69,8 @@ export default function Navbar() {
             <NavItem href="/gallery">Gallery</NavItem>
             <NavItem href="/contact">Contact</NavItem>
             <Button
-              href="/dashboard/dash/dashboard"
-              title="LOGIN"
+              href={email ? "dashboard/dash/dashboard" : "/auth/login"}
+              title={email ? "Dashboard" : "LOGIN"}
               className="bg-transparent py-2 px-10 text-lg border border-[#00AEEF] text-[#3669c8] hover:bg-[#00AEEF] hover:text-black transition duration-300"
             />
           </ul>
@@ -84,9 +86,8 @@ export default function Navbar() {
             <NavItem href="/contact">Contact</NavItem>
           </ul>
           <Button
-            disabled={true}
-            href="/dashboard/dash/dashboard"
-            title="LOGIN"
+            href={email ? "dashboard/dash/dashboard" : "/auth/login"}
+            title={email ? "Dashboard" : "LOGIN"}
             className="bg-transparent py-2 px-10 text-lg border border-[#00AEEF] text-[#3669c8] hover:bg-[#00AEEF] hover:text-black transition duration-300"
           />
         </div>

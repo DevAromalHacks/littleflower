@@ -15,14 +15,14 @@ import Footer from "./components/screens/Footer";
 import Contact from "./components/screens/Contact";
 
 export default function Page() {
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      router.push('/dashboard/dash/dashboard');
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   const userEmail = localStorage.getItem('userEmail');
+  //   if (userEmail) {
+  //     router.push('/dashboard/dash/dashboard');
+  //   }
+  // }, [router]);
 
   return (
     <div>

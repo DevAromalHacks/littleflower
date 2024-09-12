@@ -126,14 +126,14 @@ export default function Navbar() {
             </div>
 
             <nav className="px-4 flex-grow">
-              {tabs.map((tab) => (
+            {tabs.map((tab) => (
                 <div
                   key={tab.label}
                   className={`cursor-pointer ${
                     activeTab === tab.label
-                      ? "bg-purple-700 text-white"
-                      : "bg-gray-800 text-gray-400"
-                  } hover:bg-purple-600 rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
+                      ? "bg-gradient-to-r from-blue-900 to-blue-600 text-white"
+                      : "bg-gradient-to-r from-gray-900 to-gray-800 text-gray-200"
+                  } hover:bg-gradient-to-r hover:from-sky-800 hover:to-indigo-700 rounded flex space-x-2 py-4 px-4 mb-4 items-center`}
                   onClick={() => setActiveTab(tab.label)}
                 >
                   <FontAwesomeIcon icon={tab.icon} className="pt-1" />
@@ -152,7 +152,7 @@ export default function Navbar() {
           
         </div>
       )}
-      <main className="flex-grow p-8 text-gray-600 text-2xl bg-gray-800">
+      <main className="flex-grow p-8 text-gray-600 text-2xl obsidean">
             {renderContent()}
       </main>
     </section>

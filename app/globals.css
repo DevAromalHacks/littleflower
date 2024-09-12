@@ -222,8 +222,6 @@ body {
 }
 
 .grad-anime {
-    /* background-image: linear-gradient(to right top, #764bdf, #5a4ac9, #4246b2, #2d419a, #1e3a81, #1d4283, #214a85, #275286, #346da3, #4189c1, #4fa7de, #5fc5fb);
-    background-size: 400% 400%; */
     animation: anime 10s ease infinite;
 }
 

@@ -112,7 +112,7 @@ export default function Msg_Container() {
 
   return (
     <section className="h-screen flex flex-col">
-      <header className="grad-anime bg-gradient-to-l from-blue-900 to-blue-600 w-full h-36 rounded-lg flex items-center justify-between px-6 shadow-lg z-10">
+      <header className="grad-anime bg-gradient-to-l from-blue-950 to-blue-600 w-full h-36 rounded-lg flex items-center justify-between px-6 shadow-lg z-10">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-md">
             <FontAwesomeIcon
@@ -121,7 +121,7 @@ export default function Msg_Container() {
             />
           </div>
           <h1 className="text-white text-2xl font-bold tracking-wider">
-            LF is Online
+            LF support
           </h1>
         </div>
         <div className="hidden md:flex items-center space-x-4">
@@ -133,28 +133,22 @@ export default function Msg_Container() {
         {messages.map((message) => (
           <div key={message.id} className="my-2">
             <div
-              className={`flex ${
-                message.user_id === user?.id ? "justify-end" : "justify-start"
-              } px-2`}
+              className="flex items-end justify-end px-2"
             >
               <div
-                className={`p-3 w-auto max-w-xs text-xl md:max-w-sm lg:max-w-md rounded-l-xl rounded-br-xl ${
-                  message.user_id === user?.id
-                    ? "bg-gradient-to-r from-blue-950 to-blue-500 text-white text-right"
-                    : "bg-gradient-to-r from-purple-950 to-purple-600 text-white text-right"
-                }`}
-                onClick={() => {
-                  if (message.user_id !== user?.id) {
-                    setSelectedMessageId(message.id);
-                  }
-                }}
+                className="p-3 w-auto max-w-xs text-xl md:max-w-sm lg:max-w-md rounded-l-xl rounded-br-xl bg-gradient-to-r from-blue-950 to-teal-800 text-white text-right"
+                // onClick={() => {
+                //   if (message.user_id !== user?.id) {
+                //     setSelectedMessageId(message.id);
+                //   }
+                // }}
               >
                 {message.message}
               </div>
             </div>
             {message.reply && (
               <div className="flex justify-start px-2 mt-2">
-                <div className="bg-gradient-to-r from-purple-950 to-purple-600 text-xl text-white rounded-r-xl rounded-bl-xl p-3 max-w-xs md:max-w-sm lg:max-w-md">
+                <div className="bg-gradient-to-r from-cyan-950 to-blue-800 text-xl text-white rounded-r-xl rounded-bl-xl p-3 max-w-xs md:max-w-sm lg:max-w-md text-left">
                   {message.reply}
                 </div>
               </div>

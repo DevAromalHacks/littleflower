@@ -18,7 +18,6 @@ export async function middleware(req: NextRequest) {
 
     const loginPath = "/auth/login";
 
-    // If the user is not authenticated and the requested path is "/dashboard/dash/dashboard", redirect to login
     if (!session && path === "/dashboard/dash/dashboard") {
       console.log("redirecting to login");
       return NextResponse.redirect(new URL(loginPath, req.url));
