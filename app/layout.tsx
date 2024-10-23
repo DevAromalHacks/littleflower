@@ -37,9 +37,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className=" text-white bg-slate-950">
+    <html lang="en" dir="ltr" className=" text-white ">
       <ToastContainer />
-      <body className="bg-slate-950">
+      <body className="bg-gray-900 dark:text-white">
         {children}
         <Analytics />
       </body>

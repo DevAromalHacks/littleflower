@@ -16,7 +16,7 @@ export default function Welcome() {
   }, [controls, inView]);
 
   return (
-    <section className="welcome bg-white">
+    <section className="welcome bg-gray-900 dark:text-white">
       <div className="flex gap-10 py-20 flex-wrap items-center justify-center">
         <div>
           <motion.div
@@ -50,10 +50,10 @@ export default function Welcome() {
             transition={{ duration: 0.5 }}
           >
             <div>
-              <h1 className="welcome-head text-center text-2xl md:text-3xl font-bold text-[#002366] mb-4 lg:mb-6">
+              <h1 className="welcome-head text-center text-2xl md:text-3xl font-bold text-indigo-600 mb-4 lg:mb-6">
                 Welcome to Our School
               </h1>
-              <p className="welcome-para max-w-screen-md text-center text-lg lg:text-md lg:px-4 mb-6 text-[#333333]">
+              <p className="welcome-para max-w-screen-md text-center text-lg lg:text-md lg:px-4 mb-6 text-gray-200">
                 Welcome to Little Flower English Medium Higher Secondary School! Nestled in the serene locale of Edava, Thiruvananthapuram, Kerala, we are dedicated to delivering academic excellence. Guided by our committed teachers, we prioritize child-centered learning and holistic development, enriching the educational journey of every student.
               </p>
               <div className="flex items-center justify-center">
@@ -61,7 +61,7 @@ export default function Welcome() {
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="welcome-button bg-[#002366] text-white rounded-md px-8 py-3 text-lg hover:bg-[#333333] transition duration-300 ease-in-out"
+                    className="welcome-button bg-indigo-600 text-white rounded-md px-8 py-3 text-lg hover:bg-[#333333] transition duration-300 ease-in-out"
                   >
                     Read More
                   </motion.button>

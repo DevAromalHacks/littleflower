@@ -38,9 +38,9 @@ const Specialites: React.FC = () => {
   }, []);
 
   return (
-    <section className="bg-gray-200 py-16">
+    <section className="py-16">
       <div className="special-head">
-        <h1 className="text-center text-3xl font-bold pb-10 text-[#002366]">
+        <h1 className="text-center text-3xl font-bold pb-10 text-indigo-600">
           Our specialties
         </h1>
       </div>
@@ -48,7 +48,7 @@ const Specialites: React.FC = () => {
         <div className="flex flex-wrap justify-center items-center gap-5">
           <div
             ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-[#00AEEF]  flex flex-col items-center justify-center circle"
+            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600  flex flex-col items-center justify-center circle"
           >
             <div className="">
               {isVisible && (
@@ -68,7 +68,7 @@ const Specialites: React.FC = () => {
           </div>
           <div
             ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-[#00AEEF] flex flex-col items-center justify-center circle"
+            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600 flex flex-col items-center justify-center circle"
           >
             <div className="">
               {isVisible && (
@@ -87,7 +87,7 @@ const Specialites: React.FC = () => {
           </div>
           <div
             ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-[#00AEEF] flex flex-col items-center justify-center circle"
+            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600 flex flex-col items-center justify-center circle"
           >
             <div className="">
               {isVisible && (
@@ -108,7 +108,7 @@ const Specialites: React.FC = () => {
 
           <div
             ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-[#00AEEF]  flex flex-col items-center justify-center circle"
+            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600  flex flex-col items-center justify-center circle"
           >
             <div className="">
               {isVisible && (

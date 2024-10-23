@@ -17,9 +17,9 @@ export default function WhyUs() {
   }, [controls, inView]);
 
   return (
-    <section className="py-16 bg-gray-200 px-4">
+    <section className="py-16 px-4">
       <div className="text-center mb-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#002366] mb-4 lg:mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-indigo-600 mb-4 lg:mb-6">
           Why Little Flower
         </h1>
       </div>
@@ -33,7 +33,7 @@ export default function WhyUs() {
             hidden: { opacity: 0, y: 100 },
           }}
           transition={{ duration: 0.5 }}
-          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-[#00AEEF] rounded-md shadow-lg"
+          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-indigo-600 rounded-md shadow-lg"
         >
           <Image
             src="/images/sports1.jpg"
@@ -58,7 +58,7 @@ export default function WhyUs() {
             hidden: { opacity: 0, y: 100 },
           }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-[#00AEEF] rounded-md shadow-lg"
+          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-indigo-600 rounded-md shadow-lg"
         >
           <Image
             src="/images/sports1.jpg"
@@ -83,7 +83,7 @@ export default function WhyUs() {
             hidden: { opacity: 0, y: 100 },
           }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-[#00AEEF] rounded-md shadow-lg"
+          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-indigo-600 rounded-md shadow-lg"
         >
           <Image
             src="/images/sports1.jpg"
@@ -108,7 +108,7 @@ export default function WhyUs() {
             hidden: { opacity: 0, y: 100 },
           }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-[#00AEEF] rounded-md shadow-lg"
+          className="card w-full md:w-1/2 lg:w-1/4 xl:w-1/5 bg-indigo-600 rounded-md shadow-lg"
         >
           <Image
             src="/images/sports1.jpg"

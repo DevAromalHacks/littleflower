@@ -2,7 +2,7 @@
 
 export default function Map() {
   return (
-    <section className="py-8 bg-gray-200">
+    <section className="py-8 ">
       <div className="max-w-7xl mx-auto p-6">
         <h1 className="text-center text-3xl text-[#002366] font-bold pb-10">
           Map

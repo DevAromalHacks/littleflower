@@ -35,12 +35,12 @@ export default function OurMission() {
   }, [controls, inView, isLargeScreen]);
 
   return (
-    <section className="py-16 bg-white px-4">
+    <section className="py-16 px-4">
       <div className="text-center mb-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#002366] mb-4 lg:mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-indigo-600 mb-4 lg:mb-6">
           Our Mission
         </h1>
-        <p className="text-lg text-gray-700 max-w-screen-md mx-auto">
+        <p className="text-lg text-gray-200 max-w-screen-md mx-auto">
           At Little Flower, we strive to nurture each student's potential and
           provide a comprehensive education that fosters intellectual growth,
           emotional resilience, and social responsibility.
@@ -55,7 +55,7 @@ export default function OurMission() {
             hidden: { opacity: 0, x: -100 },
           }}
           transition={{ duration: 0.5 }}
-          className="w-full md:w-1/2 lg:w-1/3 bg-[#00AEEF] rounded-md shadow-lg"
+          className="w-full md:w-1/2 lg:w-1/3 bg-indigo-600 rounded-md shadow-lg"
         >
           <div className="p-6 text-white">
             <h2 className="text-xl font-bold mb-4">Innovative Learning</h2>
@@ -74,7 +74,7 @@ export default function OurMission() {
             hidden: { opacity: 0, x: 100 },
           }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full md:w-1/2 lg:w-1/3 bg-[#00AEEF] rounded-md shadow-lg"
+          className="w-full md:w-1/2 lg:w-1/3 bg-indigo-600 rounded-md shadow-lg"
         >
           <div className="p-6 text-white">
             <h2 className="text-xl font-bold mb-4">Community Engagement</h2>
@@ -92,7 +92,7 @@ export default function OurMission() {
             hidden: { opacity: 0, x: -100 },
           }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="w-full md:w-1/2 lg:w-1/3 bg-[#00AEEF] rounded-md shadow-lg"
+          className="w-full md:w-1/2 lg:w-1/3 bg-indigo-600 rounded-md shadow-lg"
         >
           <div className="p-6 text-white">
             <h2 className="text-xl font-bold mb-4">Holistic Development</h2>

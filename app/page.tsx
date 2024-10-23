@@ -32,7 +32,7 @@ export default function Page() {
       <Whyus />
       <Levels />
       <Speciality />
-      <Testimonial />
+      {/* <Testimonial /> */}
       <Contact />
       <Map />
       <Footer />
