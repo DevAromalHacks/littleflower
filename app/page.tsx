@@ -1,41 +1,66 @@
-"use client"
+"use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Nav from "./components/includes/Navbar";
+import CustomHeader from "./components/includes/CustomHeader";
 import Hero from "./components/screens/Hero";
-import Welcome from "./components/screens/Welcome";
-import Whyus from "./components/screens/Whyus";
-import Levels from "./components/screens/Levels";
-import Speciality from "./components/screens/Speciality";
-import Achivements from "./components/screens/Achivements";
-import Map from "./components/screens/Map";
+import About from "./components/screens/About";
+import Founder from "./components/screens/Founder";
+import Mission from "./components/screens/Mission";
+import Achievements from "./components/screens/Achivements";
+import Specialites from "./components/screens/Speciality";
 import Testimonial from "./components/screens/Testimonial";
-import Footer from "./components/screens/Footer";
+import Map from "./components/screens/Map";
 import Contact from "./components/screens/Contact";
+import Footer from "./components/screens/Footer";
+import AdmissionPopUp from "./components/includes/PopUp";
+import { useEffect, useState } from "react";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
+import SideBanner from "./components/includes/SideBanner";
 
-export default function Page() {
-  const router = useRouter();
+
+export default function LandingPage() {
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      router.push('/dashboard/dash/dashboard');
-    }
-  }, [router]);
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <div>
-      <Nav />
+    <main>
+      <CustomHeader />
       <Hero />
-      <Welcome />
-      <Whyus />
-      <Levels />
-      <Speciality />
-      {/* <Testimonial /> */}
-      <Contact />
+      <About />
+      <Founder />
+      <Mission />
+      <Achievements />
+      <Specialites />
+      <Testimonial />
       <Map />
+      <Contact />
       <Footer />
-    </div>
+      <SideBanner />
+      <FloatingWhatsApp
+          phoneNumber="+918086023123"
+          accountName="Gem Know Model HSS"
+          darkMode={true}
+          notificationSound={true}
+          allowClickAway={false}
+          chatboxHeight={450}
+          notification={true}
+          className="text-black"
+          avatar="/logo-roundco.avif"
+        />
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <AdmissionPopUp closeModal={closeModal} />
+        </div>
+      )}
+    </main>
   );
 }

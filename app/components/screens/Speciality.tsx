@@ -1,10 +1,16 @@
-"use client"
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, RefObject } from "react";
 import CountUp from "react-countup";
 
-const Specialites: React.FC = () => {
-  const counterRefs = useRef<HTMLDivElement[]>([]);
+const SchoolSpecialties: React.FC = () => {
+  const counterRefs: RefObject<HTMLDivElement>[] = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+  ];
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const handleIntersection: IntersectionObserverCallback = (
@@ -26,103 +32,107 @@ const Specialites: React.FC = () => {
 
     const observer = new IntersectionObserver(handleIntersection, options);
 
-    counterRefs.current.forEach((ref) => {
-      if (ref) {
-        observer.observe(ref);
+    counterRefs.forEach((ref) => {
+      if (ref.current) {
+        observer.observe(ref.current);
       }
     });
 
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [counterRefs]);
 
   return (
-    <section className="py-16">
-      <div className="special-head">
-        <h1 className="text-center text-3xl font-bold pb-10 text-indigo-600">
-          Our specialties
-        </h1>
+    <section
+      className="bg-white py-16 bg-floral mix-blend-multiply"
+      id="specialty"
+    >
+      <div className="text-center mb-8 sm:mb-12">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-700">
+          <span className="border-l-4 border-teal-800 mr-2"></span>Our
+          School&apos;s Achievements
+        </h2>
+        <h2 className="text-3xl sm:text-4xl pt-2 pb-6 sm:pb-8 text-teal-800 font-bold">
+          Discover Our Success
+        </h2>
       </div>
-      <div className="specialites-wrapper">
+
+      <div className="specialties-wrapper">
         <div className="flex flex-wrap justify-center items-center gap-5">
           <div
-            ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600  flex flex-col items-center justify-center circle"
+            ref={counterRefs[0]}
+            className="w-40 h-40 sm:w-64 sm:h-64 flex flex-col items-center justify-center text-white bg-teal-500 rounded-full"
           >
-            <div className="">
+            <div>
               {isVisible && (
                 <div className="flex items-center">
-                  <h1 className="text-4xl">
-                    {isVisible && (
-                      <CountUp start={0} end={1000} duration={2} delay={0} />
-                    )}
-                    {isVisible && <span>+</span>}
-                  </h1>
+                  <h2 className="text-2xl lg:text-4xl md:text-4xl font-bold">
+                    <CountUp start={0} end={1200} duration={2} delay={0} />
+                    <span>+</span>
+                  </h2>
                 </div>
               )}
             </div>
             <div>
-              <p className="text-2xl">Students</p>
-            </div>
-          </div>
-          <div
-            ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600 flex flex-col items-center justify-center circle"
-          >
-            <div className="">
-              {isVisible && (
-                <div className="flex items-center">
-                  <h1 className="text-4xl">
-                    {isVisible && (
-                      <CountUp start={0} end={80} duration={2} delay={0} />
-                    )}
-                  </h1>
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="text-2xl">Faculty</p>
-            </div>
-          </div>
-          <div
-            ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600 flex flex-col items-center justify-center circle"
-          >
-            <div className="">
-              {isVisible && (
-                <div className="flex items-center">
-                  <h1 className="text-4xl">
-                    {isVisible && (
-                      <CountUp start={0} end={65} duration={2} delay={0} />
-                    )}
-                    {isVisible && <span>+</span>}
-                  </h1>
-                </div>
-              )}
-            </div>
-            <div>
-              <p className="text-2xl">Experience</p>
+              <p className="text-xl lg:text:2xl md:text-2xl">Students</p>
             </div>
           </div>
 
           <div
-            ref={(el) => el && (counterRefs.current[3] = el)}
-            className="w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-indigo-600  flex flex-col items-center justify-center circle"
+            ref={counterRefs[1]}
+            className="w-40 h-40 sm:w-64 sm:h-64 flex flex-col items-center justify-center text-white bg-teal-500 rounded-full"
           >
-            <div className="">
+            <div>
               {isVisible && (
                 <div className="flex items-center">
-                  <h1 className="text-4xl">
-                    {isVisible && (
-                      <CountUp start={0} end={200} duration={2} delay={0} />
-                    )}
-                  </h1>
+                  <h2 className="text-2xl lg:text-4xl md:text-4xl font-bold">
+                    <CountUp start={0} end={80} duration={2} delay={0} />
+                    <span>+</span>
+                  </h2>
                 </div>
               )}
             </div>
             <div>
-              <p className="text-2xl">Alumni</p>
+              <p className="text-xl lg:text:2xl md:text-2xl">Teachers</p>
+            </div>
+          </div>
+
+          <div
+            ref={counterRefs[2]}
+            className="w-40 h-40 sm:w-64 sm:h-64 flex flex-col items-center justify-center text-white bg-teal-500 rounded-full"
+          >
+            <div>
+              {isVisible && (
+                <div className="flex items-center">
+                  <h2 className="text-2xl lg:text-4xl md:text-4xl font-bold">
+                    <CountUp start={0} end={30} duration={2} delay={0} />
+                    <span>+</span>
+                  </h2>
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="text-xl lg:text:2xl md:text-2xl">Clubs</p>
+            </div>
+          </div>
+
+          <div
+            ref={counterRefs[3]}
+            className="w-40 h-40 sm:w-64 sm:h-64 flex flex-col items-center justify-center text-white bg-teal-500 rounded-full"
+          >
+            <div>
+              {isVisible && (
+                <div className="flex items-center">
+                  <h2 className="text-2xl lg:text-4xl md:text-4xl font-bold">
+                    <CountUp start={0} end={15} duration={2} delay={0} />
+                    <span>+</span>
+                  </h2>
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="text-xl lg:text:2xl md:text-2xl">Experience</p>
             </div>
           </div>
         </div>
@@ -131,4 +141,4 @@ const Specialites: React.FC = () => {
   );
 };
 
-export default Specialites;
+export default SchoolSpecialties;

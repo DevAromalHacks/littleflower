@@ -1,47 +1,64 @@
-import type { Metadata, Viewport } from "next";
-import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "@uploadthing/react/styles.css";
-
-const APP_NAME = "L.F.E.M.H.S.S";
-const APP_DESCRIPTION = "This is an example of using next-pwa";
+import "@fontsource/nunito";
 
 export const metadata: Metadata = {
-  applicationName: APP_NAME,
-  title: {
-    default: APP_NAME,
-    template: "%s - PWA App",
+  title: "Little Flower English Medium Higher Secondary School",
+  description: "Experience excellence in education at Little Flower English Medium Higher Secondary School, a premier CBSE-affiliated institution in Kochi, Kerala, dedicated to nurturing future leaders.",
+  keywords: [
+    "Little Flower English Medium Higher Secondary School",
+    "CBSE schools in Kochi",
+    "best higher secondary schools in Kerala",
+    "top CBSE schools in Kerala",
+    "quality education in Kochi",
+    "CBSE affiliated schools in Kerala",
+    "leading higher secondary schools in Kochi",
+    "Little Flower School Kerala",
+    "holistic education in Kerala",
+    "top-ranked CBSE schools in Kochi",
+  ].join(", "),
+  openGraph: {
+    title: "Little Flower English Medium Higher Secondary School",
+    description: "Join Little Flower English Medium Higher Secondary School in Kochi, Kerala, and experience top-tier CBSE education fostering academic excellence and holistic development.",
+    url: "https://lfemhs.com",
+    type: "website",
+    images: [
+      {
+        url: "/logo-littleflower.avif",
+        width: 1200,
+        height: 630,
+        alt: "Little Flower English Medium Higher Secondary School",
+      },
+    ],
   },
-  description: APP_DESCRIPTION,
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: APP_NAME,
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  icons: {
-    shortcut: "/favicon.ico",
-    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  twitter: {
+    card: "summary_large_image",
+    title: "Little Flower English Medium Higher Secondary School | Premier CBSE Education in Kerala",
+    description: "Discover the premier CBSE education at Little Flower English Medium Higher Secondary School in Kochi, Kerala, dedicated to nurturing future leaders.",
+    images: ["/images/twitter-image-littleflower.jpg"],
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: "#FFFFFF",
+export const viewport = {
+  width: "device-width",
+  initialScale: 1.0,
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" dir="ltr" className=" text-white ">
-      <ToastContainer />
-      <body className="bg-gray-900 dark:text-white">
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="canonical" href="https://littleflowerhsskochi.com" />
+        <meta name="robots" content="index, follow" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body className="antialiased" style={{ fontFamily: "Nunito" }}>
         {children}
-        <Analytics />
       </body>
     </html>
   );

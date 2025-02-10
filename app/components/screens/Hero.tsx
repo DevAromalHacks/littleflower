@@ -1,104 +1,89 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import Navbar from "../includes/Navbar";
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+
+interface Slide {
+  image: string;
+  caption: string;
+  description: string;
+}
+
+const slides: Slide[] = [
+  {
+    image: "/images/school_auto_x2.jpg",
+    caption: "Little Flower English Medium Higher Secondary School",
+    description: "A place where dreams take flight and futures are shaped.",
+  },
+  {
+    image: "/bg2co.avif",
+    caption: "Heading back to school?",
+    description: "Embrace the journey of learning and discovery.",
+  },
+  {
+    image: "/bg3co.avif",
+    caption: "Building a Brighter Tomorrow",
+    description: "Together, we cultivate the leaders of tomorrow.",
+  },
+  {
+    image: "/bg4co.avif",
+    caption: "Where Knowledge Meets Excellence",
+    description: "Join us in a pursuit of excellence and lifelong learning.",
+  },
+];
+
+const SideBanner = dynamic(() => import("../includes/SideBanner"), {
+  ssr: false,
+});
 
 export default function Hero() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-
-  const toggleChat = () => {
-    setIsChatOpen(!isChatOpen);
-  };
-
-  const controls = useAnimation();
-  const { ref, inView } = useInView({ triggerOnce: true });
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (inView) {
-      controls.start("visible");
-    }
-  }, [controls, inView]);
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
-    <section className="relative block md:block lg:block">
-      <div
-        style={{
-          backgroundImage: "url('/images/school_auto_x2.jpg')",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        className="relative"
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="relative z-10 w-full px-4">
-          <Navbar />
-          <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={controls}
-            variants={{
-              visible: { opacity: 1, y: 0 },
-              hidden: { opacity: 0, y: 100 },
-            }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
+    <section className="h-screen w-full relative overflow-hidden">
+      <AnimatePresence>
+        <motion.div
+          key={index}
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${slides[index].image})`,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+        />
+      </AnimatePresence>
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center min-h-screen bg-black bg-opacity-50">
+        <div className="text-center px-4 md:px-8 mt-40">
+          <h1 className="font-nunito font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white max-w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[900px] mx-auto">
+            {slides[index].caption}
+          </h1>
+          <p className="font-nunito text-gray-300 font-bold text-sm sm:text-xl md:text-2xl lg:text-xl mt-4">
+            {slides[index].description}
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="bg-yellow-500 px-8 py-3 md:px-10 md:py-4 font-bold text-white hover:bg-teal-800 transition-all duration-200 mt-6"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white relative z-50 font-serif mb-6">
-              Empowering Minds, Igniting Futures: <br /> Welcome to Little Flower
-            </h1>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href="#contact">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="bg-gray-200 text-black mt-5 rounded-md px-8 py-3 hover:bg-gray-300 transition duration-300 ease-in-out font-bold"
-                >
-                  Contact us
-                </motion.button>
-              </Link>
-              <Link href="/enroll">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="bg-cyan-600 mt-5 text-black rounded-md px-8 py-3 hover:bg-cyan-700 transition duration-300 ease-in-out font-bold"
-                >
-                  Enroll Now
-                </motion.button>
-              </Link>
-            </div>
-          </motion.div>
+            Discover More
+          </motion.button>
         </div>
-        <div className="fixed bottom-10 right-10 z-20">
-          <div className="w-16 h-16 flex justify-center items-center">
-            <button onClick={toggleChat} className="outline-none focus:outline-none">
-              <Image
-                src="/icons/bot.png"
-                alt="chatbot"
-                width={64}
-                height={64}
-                className="w-full cursor-pointer z-50 shadow-purple-600 hover:shadow-lg transition duration-300 ease-in-out"
-              />
-            </button>
-          </div>
-        </div>
-        {isChatOpen && (
-          <div className="fixed lg:bottom-24 bottom-8 md:bottom-24 right-16 md:right-20 lg:right-40  p-4 z-20 rounded-lg shadow-lg w-64">
-            <iframe
-              src="https://www.chatbase.co/chatbot-iframe/QqtxZYwWGfVdWEM5qzEow"
-              className="w-96 h-[500px]"
-              frameBorder="0"
-            ></iframe>
-          </div>
-        )}
       </div>
+      <SideBanner />
     </section>
   );
 }

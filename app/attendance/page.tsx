@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faUserClock, faClipboard } from "@fortawesome/free-solid-svg-icons";
-import "react-toastify/dist/ReactToastify.css";
+import { Moon, Sun } from "lucide-react";
 
 interface Student {
   id: number;
@@ -15,277 +13,190 @@ interface Student {
 }
 
 export default function Attendance() {
+  const [step, setStep] = useState(1);
   const [students, setStudents] = useState<Student[]>([]);
-  const [absentees, setAbsentees] = useState<Student[]>([]);
   const [classSelected, setClassSelected] = useState<string>("");
   const [divSelected, setDivSelected] = useState<string>("");
+  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const studentsRef = useRef<HTMLDivElement>(null);
   const supabase = createClientComponentClient();
 
-  useEffect(() => {
-    if (classSelected && divSelected) {
-      fetchStudents(classSelected, divSelected);
-    }
-  }, [classSelected, divSelected]);
-
-  const fetchStudents = async (classSelected: string, divSelected: string) => {
+  const fetchStudents = async () => {
     try {
       const { data: studentsData, error } = await supabase
         .from("Students_Data")
         .select("*")
         .eq("class", classSelected)
         .eq("div", divSelected);
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       setStudents(studentsData || []);
     } catch (error) {
       toast.error((error as Error).message);
     }
   };
 
-  const handleFetchStudents = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (classSelected && divSelected) {
-      fetchStudents(classSelected, divSelected);
-    } else {
-      toast.error("Please select both class and division.");
+  const handleNextStep = () => {
+    if (!classSelected || !divSelected) {
+      toast.error("Please select a class and division.");
+      return;
     }
-  };
-
-  const handleLateStudent = async (student: Student) => {
-    try {
-      const response = await fetch("https://eightc562bc5-b1fe-46f1-a0bf-4cece4e9610b.onrender.com/api/late", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: student.name,
-          phone: student.phone_number,
-          class: classSelected,
-          div: divSelected,
-        }),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
-      }
-  
-      toast.success("Student marked as late");
-    } catch (error) {
-      toast.error((error as Error).message);
-    }
-  };
-
-  const handleToggleAbsentee = (student: Student) => {
-    if (absentees.find((absentee) => absentee.id === student.id)) {
-      setAbsentees((prevAbsentees) =>
-        prevAbsentees.filter((absentee) => absentee.id !== student.id)
-      );
-    } else {
-      setAbsentees((prevAbsentees) => [...prevAbsentees, student]);
-    }
-  };
-
-  const handleCopyAllToClipboard = () => {
-    const namesToCopy = absentees.map(student => student.name).join("\n");
-    navigator.clipboard.writeText(namesToCopy)
-      .then(() => {
-        toast.success("Absentee names copied to clipboard!");
-      })
-      .catch((error) => {
-        toast.error("Failed to copy absentee names to clipboard.");
-        console.error("Copy to clipboard failed: ", error);
-      });
+    fetchStudents();
+    setStep(2);
   };
 
   const handleSubmitAbsentees = async () => {
     try {
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1;
-      const currentDay = currentDate.getDate();
+      if (!studentsRef.current) return;
 
-      const absenteePromises = absentees.map(async (student) => {
-        const { error: insertError } = await supabase.from("AbsentDays").insert([
-          {
-            name: student.name,
-            phone_number: student.phone_number,
-            class: classSelected,
-            div: divSelected,
-            month: currentMonth,
-            day: currentDay,
-          },
-        ]);
-        if (insertError) {
-          throw insertError;
-        }
-
-        const response = await fetch("https://eightc562bc5-b1fe-46f1-a0bf-4cece4e9610b.onrender.com/api/whatsapp", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: student.name,
-            phone: student.phone_number,
-            class: classSelected,
-            div: divSelected,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error);
-        }
+      const checkedStudents = students.filter((student) => {
+        const checkbox = document.getElementById(
+          `student-${student.id}`
+        ) as HTMLInputElement;
+        return checkbox?.checked;
       });
 
+      if (checkedStudents.length === 0) {
+        toast.error("No students selected as absent.");
+        return;
+      }
+
+      const currentDate = new Date().toLocaleDateString("en-GB");
+
+      const absenteePromises = checkedStudents.map((student) =>
+        fetch("/api/absentees", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: student.name,
+            className: classSelected,
+            div: divSelected,
+            day: currentDate,
+            phone: student.phone_number,
+          }),
+        })
+      );
+
       await Promise.all(absenteePromises);
-      toast.success("Absentees marked and WhatsApp message sent successfully.");
-      setAbsentees([]);
+      toast.success("Absentees marked and notified successfully.");
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error(`Failed to mark absentees.,${error}`);
     }
   };
 
+  useEffect(() => {
+    if (step === 2 && studentsRef.current) {
+      studentsRef.current.innerHTML = students
+        .map(
+          (student) => `
+            <div class="grid grid-cols-3 items-center py-2 border-b">
+              <span>${student.name}</span>
+              <span>${student.roll}</span>
+              <div class="flex justify-end items-center gap-4">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="checkbox" id="student-${student.id}" class="form-checkbox h-5 w-5 text-sky-500" />
+                  <span class="text-green-500">Absent</span>
+                </label>
+              </div>
+            </div>
+          `
+        )
+        .join("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [students]);
+
   return (
-    <section className="bg-gradient-to-r from-green-300 to-blue-500 min-h-screen p-10 text-gray-900">
-      <h1 className="text-center font-bold text-white text-4xl py-10">
-        Take Attendance
-      </h1>
-      <div className="flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <form className="flex gap-2 mb-4" onSubmit={handleFetchStudents}>
-            <div>
-              <label className="block text-gray-700">Select class</label>
-              <select
-                name="class"
-                value={classSelected}
-                onChange={(e) => setClassSelected(e.target.value)}
-                className="block w-full p-2 rounded-md bg-gray-200 border border-gray-300 text-gray-800"
-                required
-              >
-                <option value="">Select class</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-gray-700">Select division</label>
-              <select
-                name="div"
-                value={divSelected}
-                onChange={(e) => setDivSelected(e.target.value)}
-                className="block w-full p-2 rounded-md bg-gray-200 border border-gray-300 text-gray-800"
-                required
-              >
-                <option value="">Select division</option>
-                {["A", "B", "C"].map((division) => (
-                  <option key={division} value={division}>
-                    {division}
-                  </option>
-                ))}
-              </select>
-            </div>
-           <div className="pt-6">
-           <button
-              type="submit"
-              className="bg-blue-500 text-white  px-10 py-[9px] rounded-md"
-            >
-              fetch
-            </button>
-           </div>
-          </form>
-          <div>
-            {students.length > 0 ? (
-              <ul>
-                <div className="flex justify-between font-semibold mb-4">
-                  <li>Name</li>
-                  <li>Roll No</li>
-                  <li>Actions</li>
-                </div>
-                {students.map((student) => (
-                  <li key={student.id} className="flex items-center py-2 border-b border-gray-300">
-                    <span className="w-1/3">{student.name}</span>
-                    <span className="w-1/3">{student.roll}</span>
-                    <div className="w-1/3 flex justify-end items-center">
-                      <input
-                        type="checkbox"
-                        onChange={() => handleToggleAbsentee(student)}
-                        checked={absentees.some(
-                          (absentee) => absentee.id === student.id
-                        )}
-                        className="mr-2"
-                      />
-                      <button
-                        onClick={() => handleLateStudent(student)}
-                        className="bg-yellow-500 text-white px-3 py-1 rounded-md ml-2 flex items-center"
-                      >
-                        <FontAwesomeIcon icon={faUserClock} className="mr-1" /> Late
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No students found.</p>
-            )}
-          </div>
-          <div className="flex items-center justify-center mt-4">
-            <button
-              onClick={handleSubmitAbsentees}
-              className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center"
-              disabled={absentees.length === 0}
-            >
-              <FontAwesomeIcon icon={faCheck} className="mr-1" /> Submit Absentees
-            </button>
-          </div>
+    <section className={`${darkMode ? "dark" : ""}`}>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+        {/* Navbar */}
+        <div className="flex justify-between items-center p-5 bg-gray-200 dark:bg-gray-800">
+          <h1 className="text-2xl font-bold">Take Attendance</h1>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 bg-gray-300 dark:bg-gray-700 rounded-lg"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
         </div>
-      </div>
-      <section className="bg-gradient-to-r from-green-300 to-blue-500 min-h-screen p-10 text-gray-900">
-        <h1 className="text-center font-bold text-white text-4xl py-10">
-          Take Attendance
-        </h1>
-        <div className="flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-            {absentees.length > 0 ? (
+
+        {/* Step 1: Select Class & Division */}
+        {step === 1 && (
+          <div className="flex flex-col items-center gap-6 p-10">
+            <h2 className="text-xl font-semibold">Select Class & Division</h2>
+            <div className="flex items-center justify-center h-96 w-full">
               <div>
-                <div className="flex justify-between font-semibold mb-4">
-                  <div>Name</div>
-                  <div>Roll No</div>
-                </div>
-                {absentees.map((student) => (
-                  <div key={student.id} className="flex items-center py-2 border-b border-gray-300">
-                    
-                    <span className="w-1/3">{student.name}</span>
-                    <span className="w-1/3">{student.roll}</span>
-                  </div>
-                ))}
-                <div className="flex items-center justify-center mt-4">
-                  <button
-                    onClick={handleCopyAllToClipboard}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center"
+                <div>
+                  <label className="block font-semibold">Class</label>
+                  <select
+                    value={classSelected}
+                    onChange={(e) => setClassSelected(e.target.value)}
+                    className="p-2 rounded-md bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-sky-500 w-full"
                   >
-                    <FontAwesomeIcon icon={faClipboard} className="mr-1" /> Copy All Names
+                    <option value="">Select class</option>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i + 1} value={String(i + 1)}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <br />
+                <div>
+                  <label className="block font-semibold">Division</label>
+                  <select
+                    value={divSelected}
+                    onChange={(e) => setDivSelected(e.target.value)}
+                    className="w-full p-2 rounded-md bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-sky-500"
+                  >
+                    <option value="">Select division</option>
+                    {["A", "B", "C"].map((division) => (
+                      <option key={division} value={division}>
+                        {division}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-center justify-center">
+                  <button
+                    onClick={handleNextStep}
+                    className="mt-8 bg-sky-500 text-white px-48 py-2 rounded-md hover:bg-sky-600 transition"
+                  >
+                    Next
                   </button>
                 </div>
               </div>
-            ) : (
-              <p>No absentees marked yet.</p>
-            )}
+            </div>
           </div>
-        </div>
-      </section>
+        )}
+
+        {/* Step 2: Show Students */}
+        {step === 2 && (
+          <div className="p-5">
+            <h2 className="text-xl font-semibold text-center mb-4">
+              Mark Attendance for Class {classSelected} - {divSelected}
+            </h2>
+            <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md">
+              <div className="grid grid-cols-3 font-semibold border-b pb-2">
+                <span>Name</span>
+                <span>Roll No</span>
+                <span className="text-right">Absent</span>
+              </div>
+              <div ref={studentsRef}></div>
+            </div>
+
+            {/* Submit Absentees */}
+            <div className="text-center p-5">
+              <button
+                onClick={handleSubmitAbsentees}
+                className="bg-green-500 text-white px-5 py-2 rounded-md hover:bg-green-600 transition"
+              >
+                Submit Absentees
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
