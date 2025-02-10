@@ -72,10 +72,10 @@ export default function ReasonsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold text-sky-400 mb-6">Absence Reasons</h1>
+      <h1 className="text-3xl font-bold text-sky-400 mb-16">Absence Reasons</h1>
 
       {/* Filter Button */}
-      <div className="absolute text-left">
+      <div className="absolute left-10 top-16">
         <button
           className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-yellow-400"
           onClick={() => setFilterOpen(!filterOpen)}
